@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div th:fragment="task-fields(taskRequest)">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" th:value="${taskRequest.name}" />
+      </div>
+      <div>
+        <label for="dueDate">Due date</label>
+        <input type="text" name="dueDate" id="dueDate" th:value="${taskRequest.dueDate}" />
+      </div>
+      <div>
+        <label for="triggerType">Trigger Type</label>
+        <select name="triggerType" id="triggerType" onchange="showCorrectParameters(this)">
+          <option value="FIXED_DELAY" th:selected="${taskRequest.triggerTypeAsString()} == 'FIXED_DELAY'">Fixed delay</option>
+          <option value="WEEKLY" th:selected="${taskRequest.triggerTypeAsString()} == 'WEEKLY'">Weekly</option>
+          <option value="MONTHLY" th:selected="${taskRequest.triggerTypeAsString()} == 'YEARLY'">Monthly</option>
+          <option value="YEARLY" th:selected="${taskRequest.triggerTypeAsString()} == 'MONTHLY'">Yearly</option>
+          <option value="ONE_OFF" th:selected="${taskRequest.triggerTypeAsString()} == 'ONE_OFF'">One off</option>
+        </select>
+      </div>
+      <div class="triggerParameter FIXED_DELAY">
+        <label for="daysBetween">Days between</label>
+        <input type="text" name="daysBetween" id="daysBetween" th:value="${taskRequest.daysBetween}" />
+      </div>
+      <div class="triggerParameter WEEKLY">
+        <label for="dayOfWeek">Day of Week</label>
+        <select name="dayOfWeek" id="dayOfWeek">
+          <option value="1" th:selected="${taskRequest.dayOfWeek} == 1">Monday</option>
+          <option value="2" th:selected="${taskRequest.dayOfWeek} == 2">Tuesday</option>
+          <option value="3" th:selected="${taskRequest.dayOfWeek} == 3">Wednesday</option>
+          <option value="4" th:selected="${taskRequest.dayOfWeek} == 4">Thursday</option>
+          <option value="5" th:selected="${taskRequest.dayOfWeek} == 5">Friday</option>
+          <option value="6" th:selected="${taskRequest.dayOfWeek} == 6">Saturday</option>
+          <option value="7" th:selected="${taskRequest.dayOfWeek} == 7">Sunday</option>
+        </select>
+      </div>
+      <div class="triggerParameter YEARLY">
+        <label for="monthOfYear">Month</label>
+        <select name="monthOfYear" id="monthOfYear">
+          <option value="1" th:selected="${taskRequest.monthOfYear} == 1">January</option>
+          <option value="2" th:selected="${taskRequest.monthOfYear} == 2">February</option>
+          <option value="3" th:selected="${taskRequest.monthOfYear} == 3">March</option>
+          <option value="4" th:selected="${taskRequest.monthOfYear} == 4">April</option>
+          <option value="5" th:selected="${taskRequest.monthOfYear} == 5">May</option>
+          <option value="6" th:selected="${taskRequest.monthOfYear} == 6">June</option>
+          <option value="7" th:selected="${taskRequest.monthOfYear} == 7">July</option>
+          <option value="8" th:selected="${taskRequest.monthOfYear} == 8">August</option>
+          <option value="9" th:selected="${taskRequest.monthOfYear} == 9">September</option>
+          <option value="10" th:selected="${taskRequest.monthOfYear} == 10">October</option>
+          <option value="11" th:selected="${taskRequest.monthOfYear} == 11">November</option>
+          <option value="12" th:selected="${taskRequest.monthOfYear} == 12">December</option>
+        </select>
+      </div>
+      <div class="triggerParameter MONTHLY YEARLY">
+        <label for="dayOfMonth">Day of month</label>
+        <input type="text" name="dayOfMonth" id="dayOfMonth" th:value="${taskRequest.dayOfMonth}" />
+      </div>
+      <div>
+        <label for="autocomplete-proxy">Autocomplete</label>
+        <input type="checkbox"
+               name="autocomplete-proxy"
+               id="autocomplete-proxy"
+               th:checked="${taskRequest.autocomplete}"
+               onchange="setHiddenAutocompleteInput(this)"/>
+        <input type="hidden" name="autocomplete" id="autocomplete" th:value="${taskRequest.autocomplete}" />
+      </div>
+      <div>
+        <label for="description">Description</label>
+        <textarea name="description" id="description" th:text="${taskRequest.description}"></textarea>
+      </div>
+
+      <script type="text/javascript">
+        function showCorrectParameters(triggerTypeElement) {
+          const triggerType = triggerTypeElement.value
+
+          // Hide all parameter elements
+          setDisplayOnElementsWithClass("triggerParameter", "none")
+
+          // Show the relevant ones
+          setDisplayOnElementsWithClass(triggerType, "block")
+        }
+
+        function setDisplayOnElementsWithClass(className, display) {
+          const elements = document.getElementsByClassName(className)
+          for (i = 0; i < elements.length; i++) {
+            elements[i].style.display = display
+          }
+        }
+
+        function setHiddenAutocompleteInput(autocompleteProxyElement) {
+          document.getElementById("autocomplete").value = autocompleteProxyElement.checked
+        }
+
+        showCorrectParameters(document.getElementById("triggerType"))
+      </script>
+    </div>
+  </body>
+</html>

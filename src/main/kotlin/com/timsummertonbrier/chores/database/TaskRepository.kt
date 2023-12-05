@@ -32,21 +32,21 @@ object TaskTriggers : IntIdTable("task_trigger") {
     var dayOfMonth = integer("day_of_month").nullable()
     var monthOfYear = integer("month_of_year").nullable()
 
-    fun UpdateBuilder<Int>.populateFrom(triggerRequest: TriggerRequest, taskId: Int) {
+    fun UpdateBuilder<Int>.populateFrom(taskRequest: TaskRequest, taskId: Int) {
         this[this@TaskTriggers.taskId] = taskId
-        this[triggerType] = triggerRequest.triggerType!!
+        this[triggerType] = taskRequest.triggerType!!
         nullOutParameters()
-        setParametersForType(triggerRequest)
+        setParametersForType(taskRequest)
     }
 
-    private fun UpdateBuilder<Int>.setParametersForType(triggerRequest: TriggerRequest) {
-        when (triggerRequest.triggerType!!) {
-            TriggerType.FIXED_DELAY -> this[daysBetween] = triggerRequest.daysBetween
-            TriggerType.WEEKLY -> this[dayOfWeek] = triggerRequest.dayOfWeek
-            TriggerType.MONTHLY -> this[dayOfMonth] = triggerRequest.dayOfMonth
+    private fun UpdateBuilder<Int>.setParametersForType(taskRequest: TaskRequest) {
+        when (taskRequest.triggerType!!) {
+            TriggerType.FIXED_DELAY -> this[daysBetween] = taskRequest.daysBetween
+            TriggerType.WEEKLY -> this[dayOfWeek] = taskRequest.dayOfWeek
+            TriggerType.MONTHLY -> this[dayOfMonth] = taskRequest.dayOfMonth
             TriggerType.YEARLY -> {
-                this[monthOfYear] = triggerRequest.monthOfYear
-                this[dayOfMonth] = triggerRequest.dayOfMonth
+                this[monthOfYear] = taskRequest.monthOfYear
+                this[dayOfMonth] = taskRequest.dayOfMonth
             }
             TriggerType.ONE_OFF -> {}
         }
@@ -88,13 +88,13 @@ fun ResultRow.toTrigger(): Trigger {
 class TaskRepository {
     fun addTask(taskRequest: TaskRequest): Int {
         val taskId = Tasks.insertAndGetId { it.populateFrom(taskRequest) }.value
-        TaskTriggers.insert { it.populateFrom(taskRequest.trigger, taskId) }
+        TaskTriggers.insert { it.populateFrom(taskRequest, taskId) }
         return taskId
     }
 
     fun updateTask(taskId: Int, taskRequest: TaskRequest) {
         Tasks.update({ Tasks.id eq taskId }) { it.populateFrom(taskRequest) }
-        TaskTriggers.update({ TaskTriggers.taskId eq taskId }) { it.populateFrom(taskRequest.trigger, taskId) }
+        TaskTriggers.update({ TaskTriggers.taskId eq taskId }) { it.populateFrom(taskRequest, taskId) }
     }
 
     fun findById(id: Int): Task {

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{layout :: layout(
+    title = 'Add task',
+    content = ~{::section}
+)}" xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <section>
+      <h1>Add Task</h1>
+      <form action="#" th:action="@{/tasks/add}" method="post">
+        <div th:replace="~{fragments/task-fields :: task-fields(${taskRequest})}"></div>
+        <input type="submit" value="Add task" />
+      </form>
+    </section>
+  </body>
+</html>

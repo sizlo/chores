@@ -31,15 +31,6 @@ data class OneOffTrigger(val dummyProperty: String = "data classes must have at 
     override val triggerType = TriggerType.ONE_OFF
 }
 
-@Serdeable
-data class TriggerRequest(
-    val triggerType: TriggerType? = null,
-    val daysBetween: Int? = null,
-    val dayOfWeek: Int? = null,
-    val dayOfMonth: Int? = null,
-    val monthOfYear: Int? = null,
-)
-
 enum class TriggerType {
     FIXED_DELAY,
     WEEKLY,

@@ -10,7 +10,7 @@ class HomeController {
 
     @Get("/")
     @View("home")
-    fun home(): HttpResponse<*> {
+    fun home(): HttpResponse<Any> {
         return HttpResponse.ok(mapOf(
             "message" to "Hello World!"
         ))
