@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{layout :: layout(
+    title = ${task.name},
+    content = ~{::section}
+)}" xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <section>
+            <h1>Task Details</h1>
+            <p>Name: <span th:text="${task.name}"></span></p>
+            <p>Due date: <span th:text="${task.dueDate}"></span></p>
+            <p>Trigger type: <span th:text="${task.trigger.triggerType}"></span></p>
+            <p th:if="${task.trigger.triggerType.name()} == 'FIXED_DELAY'">Days between: <span th:text="${task.trigger.daysBetween}"></span></p>
+            <p th:if="${task.trigger.triggerType.name()} == 'WEEKLY'">Day of week: <span th:text="${task.trigger.dayOfWeek}"></span></p>
+            <p th:if="${task.trigger.triggerType.name()} == 'MONTHLY'">Day of month: <span th:text="${task.trigger.dayOfMonth}"></span></p>
+            <p th:if="${task.trigger.triggerType.name()} == 'YEARLY'">Month: <span th:text="${task.trigger.monthOfYear}"></span></p>
+            <p th:if="${task.trigger.triggerType.name()} == 'YEARLY'">Day of month: <span th:text="${task.trigger.dayOfMonth}"></span></p>
+            <p>Autocomplete: <span th:text="${task.autocomplete}"></span></p>
+            <p>Description: <span th:text="${task.description}"></span></p>
+            <p>Created at: <span th:text="${task.createdTimestamp}"></span></p>
+            <p>Updated at: <span th:text="${task.updatedTimestamp}"></span></p>
+        </section>
+    </body>
+</html>

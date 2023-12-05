@@ -6,7 +6,7 @@ import com.timsummertonbrier.chores.domain.TaskRequest
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 
-@Controller("/tasks", consumes = [MediaType.APPLICATION_JSON])
+@Controller("/api/tasks", consumes = [MediaType.APPLICATION_JSON])
 open class TaskRestController(private val taskRepository: TaskRepository) {
 
     @Post
