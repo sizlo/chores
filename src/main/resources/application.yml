@@ -5,6 +5,9 @@ micronaut:
     static-resources:
       default:
         paths: classpath:static
+  serde:
+    serialization:
+      inclusion: always
 
 app:
   version: ${version}
