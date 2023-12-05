@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{layout :: layout(
+    title = 'Home',
+    content = ~{::section}
+)}" xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <section>
+            <h1>Home</h1>
+            <p th:text="${message}"></p>
+        </section>
+    </body>
+</html>

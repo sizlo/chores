@@ -1,0 +1,24 @@
+app:
+  environment: local
+
+datasources:
+  default:
+    # When trying to use the normal environment variable with default value syntax
+    # it is broken if the default value contains a colon. So if we tried to set
+    # the database url like so:
+    # url: ${DATASOURCES_DEFAULT_URL:jdbc:postgresql://localhost:5432/chores}
+    # if the environment variable is not set the value which gets used is:
+    # 5432/chores
+    # aka, the string after the final colon in the line.
+    # Workaround this by setting a DATASOURCES_DEFAULT_URL property below.
+    # If the environment variable is set the envar has precedence, so we can still override
+    # the database url via envars
+    url: ${DATASOURCES_DEFAULT_URL}
+    username: ${DATASOURCES_DEFAULT_USERNAME:local-user}
+    password: ${DATASOURCES_DEFAULT_PASSWORD:local-password}
+
+logger:
+  levels:
+    Exposed: DEBUG
+
+DATASOURCES_DEFAULT_URL: jdbc:postgresql://localhost:5432/chores

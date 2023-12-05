@@ -1,0 +1,26 @@
+micronaut:
+  application:
+    name: chores
+  router:
+    static-resources:
+      default:
+        paths: classpath:static
+
+app:
+  version: ${version}
+
+datasources:
+  default:
+    db-type: postgres
+    dialect: POSTGRES
+    driver-class-name: org.postgresql.Driver
+    # The postgres provider I am using has a limit of 5 active connections,
+    # and during dev when connecting to the database manually for debugging
+    # I regularly hit this limit. Keep our connection pool size low to avoid
+    # this. Consider increasing the pool size when active dev is less frequent.
+    maximum-pool-size: 2
+
+flyway:
+  datasources:
+    default:
+      enabled: true
