@@ -3,12 +3,9 @@ package com.timsummertonbrier.chores.database
 import com.timsummertonbrier.chores.domain.*
 import jakarta.inject.Singleton
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.insertAndGetId
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.kotlin.datetime.date
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 
 object Tasks : IntIdTable("task") {
@@ -38,7 +35,12 @@ object TaskTriggers : IntIdTable("task_trigger") {
     fun UpdateBuilder<Int>.populateFrom(triggerRequest: TriggerRequest, taskId: Int) {
         this[this@TaskTriggers.taskId] = taskId
         this[triggerType] = triggerRequest.triggerType!!
-        when(triggerRequest.triggerType) {
+        nullOutParameters()
+        setParametersForType(triggerRequest)
+    }
+
+    private fun UpdateBuilder<Int>.setParametersForType(triggerRequest: TriggerRequest) {
+        when (triggerRequest.triggerType!!) {
             TriggerType.FIXED_DELAY -> this[daysBetween] = triggerRequest.daysBetween
             TriggerType.WEEKLY -> this[dayOfWeek] = triggerRequest.dayOfWeek
             TriggerType.MONTHLY -> this[dayOfMonth] = triggerRequest.dayOfMonth
@@ -48,6 +50,13 @@ object TaskTriggers : IntIdTable("task_trigger") {
             }
             TriggerType.ONE_OFF -> {}
         }
+    }
+
+    private fun UpdateBuilder<Int>.nullOutParameters() {
+        this[daysBetween] = null
+        this[dayOfWeek] = null
+        this[dayOfMonth] = null
+        this[monthOfYear] = null
     }
 }
 
@@ -81,6 +90,11 @@ class TaskRepository {
         val taskId = Tasks.insertAndGetId { it.populateFrom(taskRequest) }.value
         TaskTriggers.insert { it.populateFrom(taskRequest.trigger, taskId) }
         return taskId
+    }
+
+    fun updateTask(taskId: Int, taskRequest: TaskRequest) {
+        Tasks.update({ Tasks.id eq taskId }) { it.populateFrom(taskRequest) }
+        TaskTriggers.update({ TaskTriggers.taskId eq taskId }) { it.populateFrom(taskRequest.trigger, taskId) }
     }
 
     fun findById(id: Int): Task {
