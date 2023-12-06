@@ -14,7 +14,7 @@
       </div>
       <div>
         <label for="triggerType">Trigger Type</label>
-        <select name="triggerType" id="triggerType" onchange="showCorrectParameters(this)">
+        <select name="triggerType" id="triggerType" onchange="onTriggerTypeChange(this)">
           <option value="FIXED_DELAY" th:selected="${taskRequest.triggerType} == 'FIXED_DELAY'">Fixed delay</option>
           <option value="WEEKLY" th:selected="${taskRequest.triggerType} == 'WEEKLY'">Weekly</option>
           <option value="MONTHLY" th:selected="${taskRequest.triggerType} == 'MONTHLY'">Monthly</option>
@@ -61,7 +61,8 @@
       </div>
       <div class="triggerParameter MONTHLY YEARLY">
         <label for="dayOfMonth">Day of month</label>
-        <input type="text" name="dayOfMonth" id="dayOfMonth" th:value="${taskRequest.dayOfMonth}" />
+        <input type="text" name="dayOfMonth" id="dayOfMonth" th:value="${taskRequest.dayOfMonth}" onkeyup="onDayOfMonthChange()" />
+        <div id="dayOfMonthNote" style="display: none;">Note: For months with more than 28 days the task will be due on the last day of the month</div>
         <div th:replace="~{fragments/field-errors :: field-errors('dayOfMonth', ${errors})}"></div>
       </div>
       <div>
@@ -106,7 +107,33 @@
           document.getElementById("autocomplete").value = autocompleteProxyElement.checked
         }
 
+        function showOrHideDayOfMonthNote() {
+          const noteElement = document.getElementById("dayOfMonthNote")
+          const triggerTypeElement = document.getElementById("triggerType")
+          const dayOfMonthElement = document.getElementById("dayOfMonth")
+
+          const isMonthlyTriggerType = triggerTypeElement.value === "MONTHLY"
+          const isMoreThan28thDayOfMonth = dayOfMonthElement.value > 28
+
+          if (isMonthlyTriggerType && isMoreThan28thDayOfMonth) {
+            noteElement.style.display = "block"
+            noteElement.innerText = `Note: For months with more than ${dayOfMonthElement.value} days the task will be due on the last day of the month`
+          } else {
+            noteElement.style.display = "none"
+          }
+        }
+
+        function onTriggerTypeChange(triggerTypeElement) {
+          showCorrectParameters(triggerTypeElement)
+          showOrHideDayOfMonthNote()
+        }
+
+        function onDayOfMonthChange() {
+          showOrHideDayOfMonthNote()
+        }
+
         showCorrectParameters(document.getElementById("triggerType"))
+        showOrHideDayOfMonthNote()
       </script>
     </div>
   </body>

@@ -12,19 +12,34 @@
             </script>
 
             <h1>Task Details</h1>
-            <p>Name: <span th:text="${task.name}"></span></p>
-            <p>Due date: <span th:text="${task.dueDate}"></span></p>
-            <p>Trigger type: <span th:text="${task.trigger.triggerType}"></span></p>
-            <p th:if="${task.trigger.triggerType.name()} == 'FIXED_DELAY'">Days between: <span th:text="${task.trigger.daysBetween}"></span></p>
-            <p th:if="${task.trigger.triggerType.name()} == 'WEEKLY'">Day of week: <span th:text="${task.trigger.dayOfWeek}"></span></p>
-            <p th:if="${task.trigger.triggerType.name()} == 'MONTHLY'">Day of month: <span th:text="${task.trigger.dayOfMonth}"></span></p>
-            <p th:if="${task.trigger.triggerType.name()} == 'YEARLY'">Month: <span th:text="${task.trigger.monthOfYear}"></span></p>
-            <p th:if="${task.trigger.triggerType.name()} == 'YEARLY'">Day of month: <span th:text="${task.trigger.dayOfMonth}"></span></p>
-            <p>Autocomplete: <span th:text="${task.autocomplete}"></span></p>
-            <p>Description: <span th:text="${task.description}"></span></p>
-            <p>Created at: <span th:text="${task.createdTimestamp}"></span></p>
-            <p>Updated at: <span th:text="${task.updatedTimestamp}"></span></p>
-            <p>
+            <div>Name: <span th:text="${task.name}"></span></div>
+            <div>Due date: <span th:text="${task.dueDate}"></span></div>
+            <div>Trigger type: <span th:text="${task.trigger.triggerType}"></span></div>
+            <div th:if="${task.trigger.triggerType.name()} == 'FIXED_DELAY'">
+                Days between: <span th:text="${task.trigger.daysBetween}"></span>
+            </div>
+            <div th:if="${task.trigger.triggerType.name()} == 'WEEKLY'">
+                Day of week: <span th:text="${task.trigger.dayOfWeek}"></span>
+            </div>
+            <div th:if="${task.trigger.triggerType.name()} == 'MONTHLY'">
+                <div>
+                    Day of month: <span th:text="${task.trigger.dayOfMonth}"></span>
+                    <div th:if="${task.trigger.dayOfMonth} > 28">
+                        Note: For months with more than <span th:text="${task.trigger.dayOfMonth}"></span> days the task will be due on the last day of the month
+                    </div>
+                </div>
+            </div>
+            <div th:if="${task.trigger.triggerType.name()} == 'YEARLY'">
+                Month: <span th:text="${task.trigger.monthOfYear}"></span>
+            </div>
+            <div th:if="${task.trigger.triggerType.name()} == 'YEARLY'">
+                Day of month: <span th:text="${task.trigger.dayOfMonth}"></span>
+            </div>
+            <div>Autocomplete: <span th:text="${task.autocomplete}"></span></div>
+            <div>Description: <span th:text="${task.description}"></span></div>
+            <div>Created at: <span th:text="${task.createdTimestamp}"></span></div>
+            <div>Updated at: <span th:text="${task.updatedTimestamp}"></span></div>
+            <div>
                 <form th:action="@{/tasks/{id}/edit(id=${task.id})}" method="get">
                     <input type="submit" value="Edit task" />
                 </form>
@@ -35,7 +50,7 @@
                         <input type="submit" value="Yes!" />
                     </span>
                 </form>
-            </p>
+            </div>
         </section>
     </body>
 </html>
