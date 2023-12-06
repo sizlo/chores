@@ -2,10 +2,13 @@ package com.timsummertonbrier.chores.controller.web
 
 import com.timsummertonbrier.chores.database.TaskRepository
 import com.timsummertonbrier.chores.domain.TaskRequest
+import com.timsummertonbrier.chores.error.resetErrorCookies
+import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.views.View
+import jakarta.validation.Valid
 import java.net.URI
 
 @Controller("/tasks")
@@ -29,31 +32,33 @@ open class TaskWebController(private val taskRepository: TaskRepository) {
 
     @Get("/add")
     @View("add-task")
-    fun viewAddTaskForm(): HttpResponse<Any> {
-        return HttpResponse.ok(mapOf(
-            "taskRequest" to TaskRequest()
-        ))
+    fun viewAddTaskForm(request: HttpRequest<Any>): HttpResponse<Any> {
+        val model = mutableMapOf<String, Any>()
+        model.addErrorModelAttributesFromCookies(request)
+        model.computeIfAbsent("taskRequest") { TaskRequest() }
+        return HttpResponse.ok<Any>(model).resetErrorCookies()
     }
 
     @Get("/{id}/edit")
     @View("edit-task")
-    fun viewEditTaskForm(@PathVariable id: Int): HttpResponse<Any> {
-        return HttpResponse.ok(mapOf(
-            "id" to id,
-            "taskRequest" to TaskRequest.fromTask(taskRepository.findById(id))
-        ))
+    fun viewEditTaskForm(@PathVariable id: Int, request: HttpRequest<Any>): HttpResponse<Any> {
+        val model = mutableMapOf<String, Any>()
+        model["id"] = id
+        model.addErrorModelAttributesFromCookies(request)
+        model.computeIfAbsent("taskRequest") { TaskRequest.fromTask(taskRepository.findById(id)) }
+        return HttpResponse.ok<Any>(model).resetErrorCookies()
     }
 
     @Post("/add")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    open fun addTask(@Body taskRequest: TaskRequest): HttpResponse<Any> {
+    open fun addTask(@Valid @Body taskRequest: TaskRequest): HttpResponse<Any> {
         val id = taskRepository.addTask(taskRequest)
         return HttpResponse.seeOther(URI.create("/tasks/$id"))
     }
 
     @Post("/{id}/edit")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    open fun editTask(@PathVariable id: Int, @Body taskRequest: TaskRequest): HttpResponse<Any> {
+    open fun editTask(@PathVariable id: Int, @Valid @Body taskRequest: TaskRequest): HttpResponse<Any> {
         taskRepository.updateTask(id, taskRequest)
         return HttpResponse.seeOther(URI.create("/tasks/$id"))
     }

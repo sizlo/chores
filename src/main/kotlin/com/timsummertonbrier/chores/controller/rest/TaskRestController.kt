@@ -5,18 +5,19 @@ import com.timsummertonbrier.chores.domain.Task
 import com.timsummertonbrier.chores.domain.TaskRequest
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
+import jakarta.validation.Valid
 
 @Controller("/api/tasks", consumes = [MediaType.APPLICATION_JSON])
 open class TaskRestController(private val taskRepository: TaskRepository) {
 
     @Post
-    open fun addTask(@Body taskRequest: TaskRequest): Task {
+    open fun addTask(@Valid @Body taskRequest: TaskRequest): Task {
         val id = taskRepository.addTask(taskRequest)
         return taskRepository.findById(id)
     }
 
     @Post("/{id}")
-    open fun updateTask(@PathVariable id: Int, @Body taskRequest: TaskRequest): Task {
+    open fun updateTask(@PathVariable id: Int, @Valid @Body taskRequest: TaskRequest): Task {
         taskRepository.updateTask(id, taskRequest)
         return taskRepository.findById(id)
     }

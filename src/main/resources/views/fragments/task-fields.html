@@ -5,24 +5,28 @@
       <div>
         <label for="name">Name</label>
         <input type="text" name="name" id="name" th:value="${taskRequest.name}" />
+        <div th:replace="~{fragments/field-errors :: field-errors('name', ${errors})}"></div>
       </div>
       <div>
         <label for="dueDate">Due date</label>
         <input type="text" name="dueDate" id="dueDate" th:value="${taskRequest.dueDate}" />
+        <div th:replace="~{fragments/field-errors :: field-errors('dueDate', ${errors})}"></div>
       </div>
       <div>
         <label for="triggerType">Trigger Type</label>
         <select name="triggerType" id="triggerType" onchange="showCorrectParameters(this)">
-          <option value="FIXED_DELAY" th:selected="${taskRequest.triggerTypeAsString()} == 'FIXED_DELAY'">Fixed delay</option>
-          <option value="WEEKLY" th:selected="${taskRequest.triggerTypeAsString()} == 'WEEKLY'">Weekly</option>
-          <option value="MONTHLY" th:selected="${taskRequest.triggerTypeAsString()} == 'YEARLY'">Monthly</option>
-          <option value="YEARLY" th:selected="${taskRequest.triggerTypeAsString()} == 'MONTHLY'">Yearly</option>
-          <option value="ONE_OFF" th:selected="${taskRequest.triggerTypeAsString()} == 'ONE_OFF'">One off</option>
+          <option value="FIXED_DELAY" th:selected="${taskRequest.triggerType} == 'FIXED_DELAY'">Fixed delay</option>
+          <option value="WEEKLY" th:selected="${taskRequest.triggerType} == 'WEEKLY'">Weekly</option>
+          <option value="MONTHLY" th:selected="${taskRequest.triggerType} == 'MONTHLY'">Monthly</option>
+          <option value="YEARLY" th:selected="${taskRequest.triggerType} == 'YEARLY'">Yearly</option>
+          <option value="ONE_OFF" th:selected="${taskRequest.triggerType} == 'ONE_OFF'">One off</option>
         </select>
+        <div th:replace="~{fragments/field-errors :: field-errors('triggerType', ${errors})}"></div>
       </div>
       <div class="triggerParameter FIXED_DELAY">
         <label for="daysBetween">Days between</label>
         <input type="text" name="daysBetween" id="daysBetween" th:value="${taskRequest.daysBetween}" />
+        <div th:replace="~{fragments/field-errors :: field-errors('daysBetween', ${errors})}"></div>
       </div>
       <div class="triggerParameter WEEKLY">
         <label for="dayOfWeek">Day of Week</label>
@@ -35,6 +39,7 @@
           <option value="6" th:selected="${taskRequest.dayOfWeek} == 6">Saturday</option>
           <option value="7" th:selected="${taskRequest.dayOfWeek} == 7">Sunday</option>
         </select>
+        <div th:replace="~{fragments/field-errors :: field-errors('dayOfWeek', ${errors})}"></div>
       </div>
       <div class="triggerParameter YEARLY">
         <label for="monthOfYear">Month</label>
@@ -52,10 +57,12 @@
           <option value="11" th:selected="${taskRequest.monthOfYear} == 11">November</option>
           <option value="12" th:selected="${taskRequest.monthOfYear} == 12">December</option>
         </select>
+        <div th:replace="~{fragments/field-errors :: field-errors('monthOfYear', ${errors})}"></div>
       </div>
       <div class="triggerParameter MONTHLY YEARLY">
         <label for="dayOfMonth">Day of month</label>
         <input type="text" name="dayOfMonth" id="dayOfMonth" th:value="${taskRequest.dayOfMonth}" />
+        <div th:replace="~{fragments/field-errors :: field-errors('dayOfMonth', ${errors})}"></div>
       </div>
       <div>
         <label for="autocomplete-proxy">Autocomplete</label>
@@ -65,10 +72,16 @@
                th:checked="${taskRequest.autocomplete}"
                onchange="setHiddenAutocompleteInput(this)"/>
         <input type="hidden" name="autocomplete" id="autocomplete" th:value="${taskRequest.autocomplete}" />
+        <div th:replace="~{fragments/field-errors :: field-errors('autocomplete', ${errors})}"></div>
       </div>
       <div>
         <label for="description">Description</label>
         <textarea name="description" id="description" th:text="${taskRequest.description}"></textarea>
+        <div th:replace="~{fragments/field-errors :: field-errors('description', ${errors})}"></div>
+      </div>
+      <div th:if="${errors != null && !errors.classErrors.isEmpty()}">
+        <div>Errors:</div>
+        <div th:each="error : ${errors.classErrors}" th:text="${error}"></div>
       </div>
 
       <script type="text/javascript">

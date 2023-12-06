@@ -20,8 +20,8 @@ object Tasks : IntIdTable("task") {
     fun UpdateBuilder<Int>.populateFrom(taskRequest: TaskRequest) {
         this[name] = taskRequest.name!!
         this[description] = taskRequest.description
-        this[dueDate] = taskRequest.dueDate
-        this[autocomplete] = taskRequest.autocomplete
+        this[dueDate] = taskRequest.dueDateAsDate()
+        this[autocomplete] = taskRequest.autocomplete!!
     }
 }
 
@@ -35,19 +35,19 @@ object TaskTriggers : Table("task_trigger") {
 
     fun UpdateBuilder<Int>.populateFrom(taskRequest: TaskRequest, taskId: Int) {
         this[this@TaskTriggers.taskId] = taskId
-        this[triggerType] = taskRequest.triggerType!!
+        this[triggerType] = taskRequest.triggerTypeAsEnum()
         nullOutParameters()
         setParametersForType(taskRequest)
     }
 
     private fun UpdateBuilder<Int>.setParametersForType(taskRequest: TaskRequest) {
-        when (taskRequest.triggerType!!) {
-            TriggerType.FIXED_DELAY -> this[daysBetween] = taskRequest.daysBetween
-            TriggerType.WEEKLY -> this[dayOfWeek] = taskRequest.dayOfWeek
-            TriggerType.MONTHLY -> this[dayOfMonth] = taskRequest.dayOfMonth
+        when (taskRequest.triggerTypeAsEnum()) {
+            TriggerType.FIXED_DELAY -> this[daysBetween] = taskRequest.daysBetween!!.toInt()
+            TriggerType.WEEKLY -> this[dayOfWeek] = taskRequest.dayOfWeek!!.toInt()
+            TriggerType.MONTHLY -> this[dayOfMonth] = taskRequest.dayOfMonth!!.toInt()
             TriggerType.YEARLY -> {
-                this[monthOfYear] = taskRequest.monthOfYear
-                this[dayOfMonth] = taskRequest.dayOfMonth
+                this[monthOfYear] = taskRequest.monthOfYear!!.toInt()
+                this[dayOfMonth] = taskRequest.dayOfMonth!!.toInt()
             }
             TriggerType.ONE_OFF -> {}
         }
