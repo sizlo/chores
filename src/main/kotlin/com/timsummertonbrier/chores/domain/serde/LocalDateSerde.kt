@@ -6,21 +6,25 @@ import jakarta.inject.Singleton
 import kotlinx.datetime.LocalDate
 
 @Singleton
-class LocalDateSerde : Serde<LocalDate> {
+class LocalDateSerde : Serde<LocalDate?> {
     override fun serialize(
         encoder: Encoder,
         context: Serializer.EncoderContext,
-        type: Argument<out LocalDate>,
-        value: LocalDate
+        type: Argument<out LocalDate?>,
+        value: LocalDate?
     ) {
-        encoder.encodeString(value.toString())
+        value?.let { encoder.encodeString(it.toString()) } ?: encoder.encodeNull()
     }
 
     override fun deserialize(
         decoder: Decoder,
         context: Deserializer.DecoderContext,
-        type: Argument<in LocalDate>
-    ): LocalDate {
-        return LocalDate.parse(decoder.decodeString())
+        type: Argument<in LocalDate?>
+    ): LocalDate? {
+        val string = decoder.decodeString()
+        if (string.isNullOrBlank()) {
+            return null
+        }
+        return LocalDate.parse(string)
     }
 }
