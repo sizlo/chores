@@ -17,7 +17,7 @@ class EmptyStringToNullIntSerde : Serde<Int?> {
         type: Argument<out Int?>,
         value: Int?
     ) {
-        TODO()
+        value?.let { encoder.encodeInt(it) } ?: encoder.encodeNull()
     }
 
     override fun deserialize(
