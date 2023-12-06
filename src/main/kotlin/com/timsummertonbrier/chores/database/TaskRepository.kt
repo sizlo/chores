@@ -25,7 +25,7 @@ object Tasks : IntIdTable("task") {
     }
 }
 
-object TaskTriggers : IntIdTable("task_trigger") {
+object TaskTriggers : Table("task_trigger") {
     var taskId = reference("task_id", Tasks.id)
     var triggerType = enumerationByName<TriggerType>("trigger_type", 30)
     var daysBetween = integer("days_between").nullable()

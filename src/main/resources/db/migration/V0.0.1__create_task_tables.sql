@@ -25,8 +25,7 @@ for each row execute procedure update_updated_timestamp();
 drop trigger if exists update_task_trigger_updated_timestamp on task_trigger;
 drop table if exists task_trigger;
 create table task_trigger(
-    id serial not null primary key,
-    task_id integer not null references task on delete cascade,
+    task_id integer not null primary key references task on delete cascade,
     trigger_type text not null,
     days_between integer,
     day_of_week integer,
