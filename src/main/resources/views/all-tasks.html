@@ -6,7 +6,14 @@
   <body>
     <section>
       <h1>All Tasks</h1>
-      <p th:text="${tasks}"></p>
+      <p th:if="${tasks.isEmpty()}">No tasks yet!</p>
+      <block th:if="${!tasks.isEmpty()}">
+        <div th:each="task : ${tasks}">
+          <span th:text="${task.name}"></span>
+          <span th:text="${task.dueDate}"></span>
+          <a th:href="@{/tasks/{id}(id=${task.id})}">View details</a>
+        </div>
+      </block>
     </section>
   </body>
 </html>

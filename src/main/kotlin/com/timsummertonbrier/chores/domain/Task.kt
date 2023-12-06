@@ -17,6 +17,12 @@ data class Task(
     val trigger: Trigger
 )
 
+data class AllTasksTaskView(
+    val id: Int,
+    val name: String,
+    val dueDate: LocalDate?
+)
+
 @Serdeable
 data class TaskRequest(
     val name: String? = null,

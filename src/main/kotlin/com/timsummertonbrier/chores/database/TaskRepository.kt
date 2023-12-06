@@ -69,7 +69,15 @@ fun ResultRow.toTask(): Task {
         this[Tasks.autocomplete],
         this[Tasks.createdTimestamp],
         this[Tasks.updatedTimestamp],
-        this.toTrigger()
+        this.toTrigger(),
+    )
+}
+
+fun ResultRow.toAllTasksTaskView(): AllTasksTaskView {
+    return AllTasksTaskView(
+        this[Tasks.id].value,
+        this[Tasks.name],
+        this[Tasks.dueDate],
     )
 }
 
@@ -99,5 +107,9 @@ class TaskRepository {
 
     fun findById(id: Int): Task {
         return (Tasks innerJoin TaskTriggers).select { Tasks.id eq id }.map { it.toTask() }.first()
+    }
+
+    fun getAllTasksForAllTasksPage(): List<AllTasksTaskView> {
+        return Tasks.selectAll().map { it.toAllTasksTaskView() }
     }
 }

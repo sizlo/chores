@@ -15,7 +15,7 @@ open class TaskWebController(private val taskRepository: TaskRepository) {
     @View("all-tasks")
     fun viewAllTasks(): HttpResponse<Any> {
         return HttpResponse.ok(mapOf(
-            "tasks" to "TODO"
+            "tasks" to taskRepository.getAllTasksForAllTasksPage()
         ))
     }
 
