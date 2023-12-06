@@ -1,4 +1,4 @@
-package com.timsummertonbrier.chores
+package com.timsummertonbrier.chores.controller.web
 
 import io.micronaut.context.annotation.Value
 import io.micronaut.http.HttpRequest
