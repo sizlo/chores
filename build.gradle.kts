@@ -47,7 +47,7 @@ dependencies {
 
 
 application {
-    mainClass.set("com.timsummertonbrier.ApplicationKt")
+    mainClass.set("com.timsummertonbrier.chores.ApplicationKt")
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
