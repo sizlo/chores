@@ -2,6 +2,7 @@ package com.timsummertonbrier.chores.database
 
 import com.timsummertonbrier.chores.domain.TaskRequest
 import com.timsummertonbrier.chores.domain.TriggerType
+import com.timsummertonbrier.chores.utils.today
 import io.micronaut.context.annotation.Requires
 import jakarta.inject.Singleton
 import kotlinx.datetime.*
@@ -20,7 +21,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
 
         taskRepository.addTask(
             TaskRequest(
-                name = "overdue-fixed",
+                name = "due-yesterday-fixed",
                 dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
@@ -30,7 +31,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
 
         taskRepository.addTask(
             TaskRequest(
-                name = "overdue-weekly",
+                name = "due-yesterday-weekly",
                 dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.WEEKLY.name,
@@ -40,7 +41,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
 
         taskRepository.addTask(
             TaskRequest(
-                name = "overdue-monthly",
+                name = "due-yesterday-monthly",
                 dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.MONTHLY.name,
@@ -50,7 +51,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
 
         taskRepository.addTask(
             TaskRequest(
-                name = "overdue-yearly",
+                name = "due-yesterday-yearly",
                 dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.YEARLY.name,
@@ -61,10 +62,20 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
 
         taskRepository.addTask(
             TaskRequest(
-                name = "overdue-one-off",
+                name = "due-yesterday-one-off",
                 dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.ONE_OFF.name,
+            )
+        )
+
+        taskRepository.addTask(
+            TaskRequest(
+                name = "due-today",
+                dueDate = LocalDate.today().toString(),
+                autocomplete = false,
+                triggerType = TriggerType.FIXED_DELAY.name,
+                daysBetween = "5",
             )
         )
 
@@ -94,8 +105,4 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
 @Requires(env = ["raspberrypi"])
 class NoopDefaultDataInserter : DefaultDataInserter {
     override fun insertDefaultData() {}
-}
-
-private fun LocalDate.Companion.today(): LocalDate {
-    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
 }

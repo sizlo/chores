@@ -28,6 +28,12 @@ data class AllTasksTaskView(
     val dueDate: LocalDate?
 )
 
+data class OverdueTasksTaskView(
+    val id: Int,
+    val name: String,
+    val daysOverdue: Int
+)
+
 @Serdeable
 @ValidTriggerParameters
 data class TaskRequest(

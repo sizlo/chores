@@ -6,7 +6,15 @@
     <body>
         <section>
             <h1>Home</h1>
-            <p th:text="${message}"></p>
+            <h2>Overdue tasks</h2>
+            <div th:if="${overdueTasks.isEmpty()}">No overdue tasks!</div>
+            <div th:if="${!overdueTasks.isEmpty()}">
+                <div th:each="task : ${overdueTasks}">
+                    <span th:text="${task.name}"></span>
+                    <span th:text="${task.daysOverdue}"></span>
+                    <a th:href="@{/tasks/{id}(id=${task.id})}">View details</a>
+                </div>
+            </div>
         </section>
     </body>
 </html>

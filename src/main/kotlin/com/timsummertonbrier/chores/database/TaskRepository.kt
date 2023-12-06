@@ -1,7 +1,10 @@
 package com.timsummertonbrier.chores.database
 
 import com.timsummertonbrier.chores.domain.*
+import com.timsummertonbrier.chores.utils.today
 import jakarta.inject.Singleton
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -82,6 +85,14 @@ fun ResultRow.toAllTasksTaskView(): AllTasksTaskView {
     )
 }
 
+fun ResultRow.toOverdueTasksTaskView(): OverdueTasksTaskView {
+    return OverdueTasksTaskView(
+        this[Tasks.id].value,
+        this[Tasks.name],
+        this[Tasks.dueDate]!!.daysUntil(LocalDate.today()),
+    )
+}
+
 fun ResultRow.toTrigger(): Trigger {
     return when (this[TaskTriggers.triggerType]) {
         TriggerType.FIXED_DELAY -> FixedDelayTrigger(this[TaskTriggers.daysBetween]!!)
@@ -116,5 +127,9 @@ class TaskRepository {
 
     fun getAllTasksForAllTasksPage(): List<AllTasksTaskView> {
         return Tasks.slice(Tasks.id, Tasks.name, Tasks.dueDate).selectAll().map { it.toAllTasksTaskView() }
+    }
+
+    fun getOverdueTasksForHomePage(): List<OverdueTasksTaskView> {
+        return Tasks.slice(Tasks.id, Tasks.name, Tasks.dueDate).select { Tasks.dueDate lessEq LocalDate.today() }.map { it.toOverdueTasksTaskView() }
     }
 }
