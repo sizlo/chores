@@ -18,6 +18,9 @@
             <p>Description: <span th:text="${task.description}"></span></p>
             <p>Created at: <span th:text="${task.createdTimestamp}"></span></p>
             <p>Updated at: <span th:text="${task.updatedTimestamp}"></span></p>
+            <p>
+                <a th:href="@{/tasks/{id}/edit(id=${task.id})}">Edit task</a>
+            </p>
         </section>
     </body>
 </html>
