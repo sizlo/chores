@@ -13,7 +13,10 @@ import javax.sql.DataSource
  * correct object to our Database
  */
 @Singleton
-class ExposedConfig(private val datasource: DataSource) {
+class ExposedConfig(
+    private val datasource: DataSource,
+    private val defaultDataInserter: DefaultDataInserter
+) {
 
     @EventListener
     @Suppress("UNUSED_PARAMETER")
@@ -21,5 +24,6 @@ class ExposedConfig(private val datasource: DataSource) {
         Database.connect(
             (datasource as DelegatingDataSource).targetDataSource
         )
+        defaultDataInserter.insertDefaultData()
     }
 }
