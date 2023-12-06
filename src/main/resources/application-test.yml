@@ -3,7 +3,6 @@ app:
 
 datasources:
   default:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: password
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/chores
+    username: local-user
+    password: local-password
