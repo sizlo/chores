@@ -115,6 +115,6 @@ class TaskRepository {
     }
 
     fun getAllTasksForAllTasksPage(): List<AllTasksTaskView> {
-        return Tasks.selectAll().map { it.toAllTasksTaskView() }
+        return Tasks.slice(Tasks.id, Tasks.name, Tasks.dueDate).selectAll().map { it.toAllTasksTaskView() }
     }
 }
