@@ -47,14 +47,14 @@ open class TaskWebController(private val taskRepository: TaskRepository) {
     @Post("/add")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     open fun addTask(@Body taskRequest: TaskRequest): HttpResponse<Any> {
-        taskRepository.addTask(taskRequest)
-        return HttpResponse.seeOther(URI.create("/tasks"))
+        val id = taskRepository.addTask(taskRequest)
+        return HttpResponse.seeOther(URI.create("/tasks/$id"))
     }
 
     @Post("/{id}/edit")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     open fun editTask(@PathVariable id: Int, @Body taskRequest: TaskRequest): HttpResponse<Any> {
         taskRepository.updateTask(id, taskRequest)
-        return HttpResponse.seeOther(URI.create("/tasks"))
+        return HttpResponse.seeOther(URI.create("/tasks/$id"))
     }
 }
