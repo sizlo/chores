@@ -68,7 +68,7 @@ data class TaskRequest(
             val request = TaskRequest(
                 task.name,
                 task.description,
-                task.dueDate.toString(),
+                task.dueDate?.toString(),
                 task.autocomplete,
                 task.trigger.triggerType.name,
                 null,
