@@ -45,14 +45,3 @@ class EmptyStringToNullStringSerde : EmptyStringToNullSerde<String>() {
         encoder.encodeString(value)
     }
 }
-
-@Singleton
-class EmptyStringToNullIntSerde : EmptyStringToNullSerde<Int>() {
-    override fun parse(string: String): Int {
-        return string.toInt()
-    }
-
-    override fun encode(encoder: Encoder, value: Int) {
-        encoder.encodeInt(value)
-    }
-}
