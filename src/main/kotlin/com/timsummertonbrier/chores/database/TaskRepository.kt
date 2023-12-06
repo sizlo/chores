@@ -4,6 +4,7 @@ import com.timsummertonbrier.chores.domain.*
 import jakarta.inject.Singleton
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.kotlin.datetime.date
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
@@ -103,6 +104,10 @@ class TaskRepository {
     fun updateTask(taskId: Int, taskRequest: TaskRequest) {
         Tasks.update({ Tasks.id eq taskId }) { it.populateFrom(taskRequest) }
         TaskTriggers.update({ TaskTriggers.taskId eq taskId }) { it.populateFrom(taskRequest, taskId) }
+    }
+
+    fun deleteTask(id: Int) {
+        Tasks.deleteWhere { Tasks.id eq id }
     }
 
     fun findById(id: Int): Task {

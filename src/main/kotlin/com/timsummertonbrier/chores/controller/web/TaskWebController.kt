@@ -57,4 +57,11 @@ open class TaskWebController(private val taskRepository: TaskRepository) {
         taskRepository.updateTask(id, taskRequest)
         return HttpResponse.seeOther(URI.create("/tasks/$id"))
     }
+
+    @Post("/{id}/delete")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    fun deleteTask(@PathVariable id: Int): HttpResponse<Any> {
+        taskRepository.deleteTask(id)
+        return HttpResponse.seeOther(URI.create("/tasks"))
+    }
 }

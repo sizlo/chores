@@ -25,4 +25,9 @@ open class TaskRestController(private val taskRepository: TaskRepository) {
     fun getTask(@PathVariable id: Int): Task {
         return taskRepository.findById(id)
     }
+
+    @Delete("/{id}")
+    fun deleteTask(@PathVariable id: Int) {
+        taskRepository.deleteTask(id)
+    }
 }
