@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDate
 
 @Serdeable
 data class Completion(
+    val id: Int? = null,
     val taskId: Int,
     val completionTimestamp: Instant,
     val dueDateWhenCompleted: LocalDate,

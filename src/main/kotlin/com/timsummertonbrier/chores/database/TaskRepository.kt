@@ -1,16 +1,20 @@
 package com.timsummertonbrier.chores.database
 
 import com.timsummertonbrier.chores.domain.*
+import com.timsummertonbrier.chores.utils.atStartOfDay
+import com.timsummertonbrier.chores.utils.now
 import com.timsummertonbrier.chores.utils.today
 import jakarta.inject.Singleton
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.daysUntil
+import kotlinx.datetime.*
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.less
 import org.jetbrains.exposed.sql.kotlin.datetime.date
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import kotlin.time.Duration.Companion.days
 
 object Tasks : IntIdTable("task") {
     var name = text("name")
@@ -135,7 +139,9 @@ class TaskRepository {
     fun findById(id: Int): Task {
         return (Tasks innerJoin TaskTriggers)
             .select { Tasks.id eq id }
-            .map { it.toTask() }.first()
+            .limit(1)
+            .map { it.toTask() }
+            .first()
     }
 
     fun getAllTasksForAllTasksPage(): List<AllTasksTaskView> {
@@ -154,8 +160,19 @@ class TaskRepository {
 
     fun getCompletedTodayTasksForHomePage(): List<CompletedTodayTasksTaskView> {
         return (TaskCompletions innerJoin Tasks)
-            .slice(Tasks.id, Tasks.name)
-            .select { TaskCompletions.completionTimestamp.date() eq today() }
+            .slice(TaskCompletions.id, Tasks.id, Tasks.name)
+            .select { wasCompletedToday() and wasNotAutocomplete() }
             .map { it.toCompletedTodayTasksTaskView() }
+    }
+
+    private fun wasCompletedToday(): Op<Boolean> {
+        val startOfToday = now().atStartOfDay()
+        val startOfTomorrow = startOfToday.plus(1.days)
+
+        return (TaskCompletions.completionTimestamp greaterEq startOfToday) and (TaskCompletions.completionTimestamp less startOfTomorrow)
+    }
+
+    private fun wasNotAutocomplete(): Op<Boolean> {
+        return TaskCompletions.wasAutocomplete eq Op.FALSE
     }
 }

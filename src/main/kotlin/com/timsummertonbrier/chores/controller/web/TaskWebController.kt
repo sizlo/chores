@@ -3,6 +3,7 @@ package com.timsummertonbrier.chores.controller.web
 import com.timsummertonbrier.chores.database.TaskRepository
 import com.timsummertonbrier.chores.domain.TaskRequest
 import com.timsummertonbrier.chores.error.resetErrorCookies
+import com.timsummertonbrier.chores.service.CompletionReverter
 import com.timsummertonbrier.chores.service.TaskCompleter
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -13,7 +14,11 @@ import jakarta.validation.Valid
 import java.net.URI
 
 @Controller("/tasks")
-open class TaskWebController(private val taskRepository: TaskRepository, private val taskCompleter: TaskCompleter) {
+open class TaskWebController(
+    private val taskRepository: TaskRepository,
+    private val taskCompleter: TaskCompleter,
+    private val completionReverter: CompletionReverter
+) {
 
     @Get
     @View("all-tasks")
@@ -75,6 +80,13 @@ open class TaskWebController(private val taskRepository: TaskRepository, private
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     fun completeTask(@PathVariable id: Int): HttpResponse<Any> {
         taskCompleter.complete(id)
+        return HttpResponse.seeOther(URI.create("/"))
+    }
+
+    @Post("/{id}/uncomplete")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    fun uncompleteTask(@PathVariable id: Int): HttpResponse<Any> {
+        completionReverter.revertLatestCompletion(id)
         return HttpResponse.seeOther(URI.create("/"))
     }
 }

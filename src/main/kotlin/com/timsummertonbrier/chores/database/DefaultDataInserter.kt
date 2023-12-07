@@ -1,11 +1,14 @@
 package com.timsummertonbrier.chores.database
 
+import com.timsummertonbrier.chores.domain.Completion
 import com.timsummertonbrier.chores.domain.TaskRequest
 import com.timsummertonbrier.chores.domain.TriggerType
+import com.timsummertonbrier.chores.utils.now
 import com.timsummertonbrier.chores.utils.today
 import io.micronaut.context.annotation.Requires
 import jakarta.inject.Singleton
 import kotlinx.datetime.*
+import kotlin.time.Duration.Companion.days
 
 interface DefaultDataInserter {
     fun insertDefaultData()
@@ -13,7 +16,11 @@ interface DefaultDataInserter {
 
 @Singleton
 @Requires(notEnv = ["raspberrypi"])
-class DevDefaultDataInserter(private val taskRepository: TaskRepository) : DefaultDataInserter {
+@ExposedTransactional
+class DevDefaultDataInserter(
+    private val taskRepository: TaskRepository,
+    private val taskCompletionRepository: TaskCompletionRepository
+) : DefaultDataInserter {
     override fun insertDefaultData() {
         if (taskRepository.getAllTasksForAllTasksPage().isNotEmpty()) {
             return
@@ -96,6 +103,62 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
                 daysBetween = "5",
+            )
+        )
+
+        val completedTodayTaskId = taskRepository.addTask(
+            TaskRequest(
+                name = "completed-today",
+                dueDate = today().plus(DatePeriod(days = 10)).toString(),
+                autocomplete = false,
+                triggerType = TriggerType.FIXED_DELAY.name,
+                daysBetween = "5",
+            )
+        )
+
+        val completedYesterdayTaskId = taskRepository.addTask(
+            TaskRequest(
+                name = "completed-yesterday",
+                dueDate = today().plus(DatePeriod(days = 10)).toString(),
+                autocomplete = false,
+                triggerType = TriggerType.FIXED_DELAY.name,
+                daysBetween = "5",
+            )
+        )
+
+        taskCompletionRepository.addCompletion(
+            Completion(
+                taskId = completedTodayTaskId,
+                completionTimestamp = now(),
+                dueDateWhenCompleted = today().minus(DatePeriod(days = 1)),
+                wasAutocomplete = false
+            )
+        )
+
+        taskCompletionRepository.addCompletion(
+            Completion(
+                taskId = completedTodayTaskId,
+                completionTimestamp = now().minus(10.days),
+                dueDateWhenCompleted = today().minus(DatePeriod(days = 10)),
+                wasAutocomplete = false
+            )
+        )
+
+        taskCompletionRepository.addCompletion(
+            Completion(
+                taskId = completedTodayTaskId,
+                completionTimestamp = now(),
+                dueDateWhenCompleted = today().minus(DatePeriod(days = 10)),
+                wasAutocomplete = true
+            )
+        )
+
+        taskCompletionRepository.addCompletion(
+            Completion(
+                taskId = completedYesterdayTaskId,
+                completionTimestamp = now().minus(1.days),
+                dueDateWhenCompleted = today().minus(DatePeriod(days = 10)),
+                wasAutocomplete = false
             )
         )
     }

@@ -2,6 +2,7 @@ package com.timsummertonbrier.chores.utils
 
 import kotlinx.datetime.*
 import java.time.DateTimeException
+import java.time.temporal.ChronoUnit
 
 fun today(): LocalDate {
     return Clock.System.todayIn(TimeZone.currentSystemDefault())
@@ -27,6 +28,10 @@ fun LocalDate.withMonthAndDayOfMonth(month: Int, dayOfMonth: Int): LocalDate {
 
 fun LocalDate.lastDayOfMonth(): LocalDate {
     return this.plus(DatePeriod(months = 1)).withDayOfMonth(1).minus(DatePeriod(days = 1))
+}
+
+fun Instant.atStartOfDay(): Instant {
+    return this.toJavaInstant().truncatedTo(ChronoUnit.DAYS).toKotlinInstant()
 }
 
 fun addLeadingZero(num: Int): String {
