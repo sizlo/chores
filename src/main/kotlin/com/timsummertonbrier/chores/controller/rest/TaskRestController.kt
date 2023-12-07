@@ -1,9 +1,7 @@
 package com.timsummertonbrier.chores.controller.rest
 
 import com.timsummertonbrier.chores.database.TaskRepository
-import com.timsummertonbrier.chores.domain.Completion
-import com.timsummertonbrier.chores.domain.Task
-import com.timsummertonbrier.chores.domain.TaskRequest
+import com.timsummertonbrier.chores.domain.*
 import com.timsummertonbrier.chores.service.CompletionReverter
 import com.timsummertonbrier.chores.service.TaskCompleter
 import io.micronaut.http.MediaType
@@ -30,11 +28,6 @@ open class TaskRestController(
         return taskRepository.findById(id)
     }
 
-    @Get("/{id}")
-    fun getTask(@PathVariable id: Int): Task {
-        return taskRepository.findById(id)
-    }
-
     @Delete("/{id}")
     fun deleteTask(@PathVariable id: Int) {
         taskRepository.deleteTask(id)
@@ -53,6 +46,31 @@ open class TaskRestController(
     fun uncompleteTask(@PathVariable id: Int): Task {
         completionReverter.revertLatestCompletion(id)
         return taskRepository.findById(id)
+    }
+
+    @Get("/{id}")
+    fun getTask(@PathVariable id: Int): Task {
+        return taskRepository.findById(id)
+    }
+
+    @Get("/")
+    fun getAllTasks(): List<AllTasksTaskView> {
+        return taskRepository.getAllTasksForAllTasksPage()
+    }
+
+    @Get("/overdue")
+    fun getOverdueTasks(): List<OverdueTasksTaskView> {
+        return taskRepository.getOverdueTasksForHomePage()
+    }
+
+    @Get("/completed-today")
+    fun getCompletedTodayTasks(): List<CompletedTodayTasksTaskView> {
+        return taskRepository.getCompletedTodayTasksForHomePage()
+    }
+
+    @Get("/overdue-autocomplete")
+    fun getOverdueAutocompleteTaskIds(): List<Int> {
+        return taskRepository.getOverdueAutocompleteTaskIds()
     }
 
     @Serdeable

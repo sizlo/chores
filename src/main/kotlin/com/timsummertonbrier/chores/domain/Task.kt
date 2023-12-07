@@ -16,18 +16,21 @@ data class Task(
     val trigger: Trigger
 )
 
+@Serdeable
 data class AllTasksTaskView(
     val id: Int,
     val name: String,
     val dueDate: LocalDate?
 )
 
+@Serdeable
 data class OverdueTasksTaskView(
     val id: Int,
     val name: String,
     val daysOverdue: Int
 )
 
+@Serdeable
 data class CompletedTodayTasksTaskView(
     val id: Int,
     val name: String
