@@ -76,8 +76,10 @@
         <div th:replace="~{fragments/field-errors :: field-errors('autocomplete', ${errors})}"></div>
       </div>
       <div>
-        <label for="description">Description</label>
-        <textarea name="description" id="description" th:text="${taskRequest.description}"></textarea>
+        <label for="description">Description (supports markdown)</label>
+        <div>
+          <textarea name="description" id="description" th:text="${taskRequest.description}"></textarea>
+        </div>
         <div th:replace="~{fragments/field-errors :: field-errors('description', ${errors})}"></div>
       </div>
       <div th:if="${errors != null && !errors.classErrors.isEmpty()}">

@@ -5,3 +5,8 @@
 .inline {
     display: inline;
 }
+
+textarea {
+    width: 800px;
+    height: 500px;
+}
