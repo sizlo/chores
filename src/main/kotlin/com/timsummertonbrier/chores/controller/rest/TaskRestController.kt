@@ -1,14 +1,17 @@
 package com.timsummertonbrier.chores.controller.rest
 
 import com.timsummertonbrier.chores.database.TaskRepository
+import com.timsummertonbrier.chores.domain.Completion
 import com.timsummertonbrier.chores.domain.Task
 import com.timsummertonbrier.chores.domain.TaskRequest
+import com.timsummertonbrier.chores.service.TaskCompleter
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
+import io.micronaut.serde.annotation.Serdeable
 import jakarta.validation.Valid
 
 @Controller("/api/tasks", consumes = [MediaType.APPLICATION_JSON])
-open class TaskRestController(private val taskRepository: TaskRepository) {
+open class TaskRestController(private val taskRepository: TaskRepository, private val taskCompleter: TaskCompleter) {
 
     @Post
     open fun addTask(@Valid @Body taskRequest: TaskRequest): Task {
@@ -31,4 +34,16 @@ open class TaskRestController(private val taskRepository: TaskRepository) {
     fun deleteTask(@PathVariable id: Int) {
         taskRepository.deleteTask(id)
     }
+
+    @Post("/{id}/complete")
+    fun completeTask(@PathVariable id: Int): CompletionResponse {
+        val completion = taskCompleter.complete(id)
+        return CompletionResponse(
+            task = taskRepository.findById(id),
+            completion = completion
+        )
+    }
+
+    @Serdeable
+    data class CompletionResponse(val task: Task, val completion: Completion)
 }

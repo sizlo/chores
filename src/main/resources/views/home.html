@@ -12,7 +12,10 @@
                 <div th:each="task : ${overdueTasks}">
                     <span th:text="${task.name}"></span>
                     <span th:text="${task.daysOverdue}"></span>
-                    <a th:href="@{/tasks/{id}(id=${task.id})}">View details</a>
+                    <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
+                    <form action="#" th:action="@{/tasks/{id}/complete(id=${task.id})}" method="post" class="inline">
+                        <input type="submit" value="Complete" />
+                    </form>
                 </div>
             </div>
         </section>

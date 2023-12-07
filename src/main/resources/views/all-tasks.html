@@ -11,7 +11,7 @@
         <div th:each="task : ${tasks}">
           <span th:text="${task.name}"></span>
           <span th:text="${task.dueDate}"></span>
-          <a th:href="@{/tasks/{id}(id=${task.id})}">View details</a>
+          <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
         </div>
       </block>
     </section>

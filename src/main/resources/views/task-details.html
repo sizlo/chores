@@ -40,10 +40,8 @@
             <div>Created at: <span th:text="${task.createdTimestamp}"></span></div>
             <div>Updated at: <span th:text="${task.updatedTimestamp}"></span></div>
             <div>
-                <form th:action="@{/tasks/{id}/edit(id=${task.id})}" method="get">
-                    <input type="submit" value="Edit task" />
-                </form>
-                <form action="#" th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post">
+                <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}/edit(id=${task.id})}, 'Edit task')}"></form>
+                <form action="#" th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" class="inline">
                     <input type="button" value="Delete task" onclick="showDeletePrompt()" />
                     <span id="delete-prompt" style="display:none">
                         <span>Are you sure?</span>

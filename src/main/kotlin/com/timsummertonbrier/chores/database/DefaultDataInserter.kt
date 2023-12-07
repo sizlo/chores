@@ -22,7 +22,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
         taskRepository.addTask(
             TaskRequest(
                 name = "due-yesterday-fixed",
-                dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
+                dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
                 daysBetween = "5",
@@ -32,7 +32,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
         taskRepository.addTask(
             TaskRequest(
                 name = "due-yesterday-weekly",
-                dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
+                dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.WEEKLY.name,
                 dayOfWeek = "2",
@@ -42,7 +42,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
         taskRepository.addTask(
             TaskRequest(
                 name = "due-yesterday-monthly",
-                dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
+                dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.MONTHLY.name,
                 dayOfMonth = "15",
@@ -52,7 +52,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
         taskRepository.addTask(
             TaskRequest(
                 name = "due-yesterday-yearly",
-                dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
+                dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.YEARLY.name,
                 monthOfYear = "3",
@@ -63,7 +63,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
         taskRepository.addTask(
             TaskRequest(
                 name = "due-yesterday-one-off",
-                dueDate = LocalDate.today().minus(DatePeriod(days = 1)).toString(),
+                dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.ONE_OFF.name,
             )
@@ -72,7 +72,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
         taskRepository.addTask(
             TaskRequest(
                 name = "due-today",
-                dueDate = LocalDate.today().toString(),
+                dueDate = today().toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
                 daysBetween = "5",
@@ -82,7 +82,7 @@ class DevDefaultDataInserter(private val taskRepository: TaskRepository) : Defau
         taskRepository.addTask(
             TaskRequest(
                 name = "due-tomorrow",
-                dueDate = LocalDate.today().plus(DatePeriod(days = 1)).toString(),
+                dueDate = today().plus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
                 daysBetween = "5",

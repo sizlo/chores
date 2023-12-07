@@ -89,7 +89,7 @@ fun ResultRow.toOverdueTasksTaskView(): OverdueTasksTaskView {
     return OverdueTasksTaskView(
         this[Tasks.id].value,
         this[Tasks.name],
-        this[Tasks.dueDate]!!.daysUntil(LocalDate.today()),
+        this[Tasks.dueDate]!!.daysUntil(today()),
     )
 }
 
@@ -117,6 +117,10 @@ class TaskRepository {
         TaskTriggers.update({ TaskTriggers.taskId eq taskId }) { it.populateFrom(taskRequest, taskId) }
     }
 
+    fun updateDueDate(taskId: Int, newDueDate: LocalDate?) {
+        Tasks.update({ Tasks.id eq taskId }) { it[dueDate] = newDueDate }
+    }
+
     fun deleteTask(id: Int) {
         Tasks.deleteWhere { Tasks.id eq id }
     }
@@ -130,6 +134,6 @@ class TaskRepository {
     }
 
     fun getOverdueTasksForHomePage(): List<OverdueTasksTaskView> {
-        return Tasks.slice(Tasks.id, Tasks.name, Tasks.dueDate).select { Tasks.dueDate lessEq LocalDate.today() }.map { it.toOverdueTasksTaskView() }
+        return Tasks.slice(Tasks.id, Tasks.name, Tasks.dueDate).select { Tasks.dueDate lessEq today() }.map { it.toOverdueTasksTaskView() }
     }
 }

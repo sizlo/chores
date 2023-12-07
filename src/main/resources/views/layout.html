@@ -2,6 +2,7 @@
 <html th:fragment="layout" xmlns:th="http://www.thymeleaf.org">
     <head>
         <title th:text="|${title} - Chores|"></title>
+        <link th:href="@{/global.css}" rel="stylesheet" />
         <link th:if="${cssFile}" th:href="${cssFile}" rel="stylesheet" />
     </head>
     <body>
