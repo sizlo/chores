@@ -138,6 +138,20 @@ class TaskRepository {
 
     fun findById(id: Int): Task {
         return (Tasks innerJoin TaskTriggers)
+            .slice(
+                Tasks.id,
+                Tasks.name,
+                Tasks.description,
+                Tasks.dueDate,
+                Tasks.autocomplete,
+                Tasks.createdTimestamp,
+                Tasks.updatedTimestamp,
+                TaskTriggers.triggerType,
+                TaskTriggers.daysBetween,
+                TaskTriggers.dayOfWeek,
+                TaskTriggers.dayOfMonth,
+                TaskTriggers.monthOfYear
+            )
             .select { Tasks.id eq id }
             .limit(1)
             .map { it.toTask() }

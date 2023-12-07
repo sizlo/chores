@@ -77,6 +77,13 @@ class TaskCompletionRepository {
 
     fun findLatestNonAutoCompletionForTaskId(taskId: Int): Completion {
         return TaskCompletions
+            .slice(
+                TaskCompletions.id,
+                TaskCompletions.taskId,
+                TaskCompletions.completionTimestamp,
+                TaskCompletions.dueDateWhenCompleted,
+                TaskCompletions.wasAutocomplete
+            )
             .select { TaskCompletions.taskId eq taskId and TaskCompletions.wasAutocomplete eq Op.FALSE }
             .orderBy(TaskCompletions.completionTimestamp, SortOrder.DESC)
             .limit(1)
