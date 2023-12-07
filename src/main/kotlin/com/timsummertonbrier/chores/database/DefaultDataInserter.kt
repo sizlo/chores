@@ -6,22 +6,21 @@ import com.timsummertonbrier.chores.domain.TriggerType
 import com.timsummertonbrier.chores.utils.now
 import com.timsummertonbrier.chores.utils.today
 import io.micronaut.context.annotation.Requires
+import io.micronaut.runtime.event.annotation.EventListener
 import jakarta.inject.Singleton
 import kotlinx.datetime.*
 import kotlin.time.Duration.Companion.days
 
-interface DefaultDataInserter {
-    fun insertDefaultData()
-}
-
 @Singleton
-@Requires(notEnv = ["raspberrypi"])
+@Requires(notEnv = ["raspberrypi", "test"])
 @ExposedTransactional
-class DevDefaultDataInserter(
+class DefaultDataInserter(
     private val taskRepository: TaskRepository,
     private val taskCompletionRepository: TaskCompletionRepository
-) : DefaultDataInserter {
-    override fun insertDefaultData() {
+) {
+    @EventListener
+    @Suppress("UNUSED_PARAMETER")
+    fun insertDefaultData(event: DatabaseReadyEvent) {
         if (taskRepository.getAllTasksForAllTasksPage().isNotEmpty()) {
             return
         }
@@ -172,10 +171,4 @@ class DevDefaultDataInserter(
             )
         )
     }
-}
-
-@Singleton
-@Requires(env = ["raspberrypi"])
-class NoopDefaultDataInserter : DefaultDataInserter {
-    override fun insertDefaultData() {}
 }

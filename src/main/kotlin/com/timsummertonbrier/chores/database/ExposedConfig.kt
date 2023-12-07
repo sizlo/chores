@@ -1,5 +1,6 @@
 package com.timsummertonbrier.chores.database
 
+import io.micronaut.context.event.ApplicationEventPublisher
 import io.micronaut.context.event.StartupEvent
 import io.micronaut.data.connection.jdbc.advice.DelegatingDataSource
 import io.micronaut.runtime.event.annotation.EventListener
@@ -15,7 +16,7 @@ import javax.sql.DataSource
 @Singleton
 class ExposedConfig(
     private val datasource: DataSource,
-    private val defaultDataInserter: DefaultDataInserter
+    private val applicationEventPublisher: ApplicationEventPublisher<DatabaseReadyEvent>
 ) {
 
     @EventListener
@@ -24,6 +25,8 @@ class ExposedConfig(
         Database.connect(
             (datasource as DelegatingDataSource).targetDataSource
         )
-        defaultDataInserter.insertDefaultData()
+        applicationEventPublisher.publishEvent(DatabaseReadyEvent())
     }
 }
+
+class DatabaseReadyEvent
