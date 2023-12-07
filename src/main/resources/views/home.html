@@ -18,6 +18,17 @@
                     </form>
                 </div>
             </div>
+
+            <div th:if="${!completedTodayTasks.isEmpty()}">
+                <h2>Completed today</h2>
+                <div th:each="task : ${completedTodayTasks}">
+                    <span th:text="${task.name}"></span>
+                    <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
+                    <form action="#" th:action="@{/tasks/{id}/uncomplete(id=${task.id})}" method="post" class="inline">
+                        <input type="submit" value="Uncomplete" />
+                    </form>
+                </div>
+            </div>
         </section>
     </body>
 </html>

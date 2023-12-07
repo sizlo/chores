@@ -13,7 +13,8 @@ class HomeWebController(private val taskRepository: TaskRepository) {
     @View("home")
     fun home(): HttpResponse<Any> {
         return HttpResponse.ok(mapOf(
-            "overdueTasks" to taskRepository.getOverdueTasksForHomePage()
+            "overdueTasks" to taskRepository.getOverdueTasksForHomePage(),
+            "completedTodayTasks" to taskRepository.getCompletedTodayTasksForHomePage()
         ))
     }
 }

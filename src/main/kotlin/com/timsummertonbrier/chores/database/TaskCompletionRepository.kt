@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 
 object TaskCompletions : IntIdTable("task_completion") {
-    var taskId = reference("task_id", id)
+    var taskId = reference("task_id", Tasks.id)
     var completionTimestamp = timestamp("completion_timestamp")
     var dueDateWhenCompleted = date("due_date_when_completed")
     var wasAutocomplete = bool("was_autocomplete")

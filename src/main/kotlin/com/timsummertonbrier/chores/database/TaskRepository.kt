@@ -93,6 +93,13 @@ fun ResultRow.toOverdueTasksTaskView(): OverdueTasksTaskView {
     )
 }
 
+fun ResultRow.toCompletedTodayTasksTaskView(): CompletedTodayTasksTaskView {
+    return CompletedTodayTasksTaskView(
+        this[Tasks.id].value,
+        this[Tasks.name]
+    )
+}
+
 fun ResultRow.toTrigger(): Trigger {
     return when (this[TaskTriggers.triggerType]) {
         TriggerType.FIXED_DELAY -> FixedDelayTrigger(this[TaskTriggers.daysBetween]!!)
@@ -126,14 +133,29 @@ class TaskRepository {
     }
 
     fun findById(id: Int): Task {
-        return (Tasks innerJoin TaskTriggers).select { Tasks.id eq id }.map { it.toTask() }.first()
+        return (Tasks innerJoin TaskTriggers)
+            .select { Tasks.id eq id }
+            .map { it.toTask() }.first()
     }
 
     fun getAllTasksForAllTasksPage(): List<AllTasksTaskView> {
-        return Tasks.slice(Tasks.id, Tasks.name, Tasks.dueDate).selectAll().map { it.toAllTasksTaskView() }
+        return Tasks
+            .slice(Tasks.id, Tasks.name, Tasks.dueDate)
+            .selectAll()
+            .map { it.toAllTasksTaskView() }
     }
 
     fun getOverdueTasksForHomePage(): List<OverdueTasksTaskView> {
-        return Tasks.slice(Tasks.id, Tasks.name, Tasks.dueDate).select { Tasks.dueDate lessEq today() }.map { it.toOverdueTasksTaskView() }
+        return Tasks
+            .slice(Tasks.id, Tasks.name, Tasks.dueDate)
+            .select { Tasks.dueDate lessEq today() }
+            .map { it.toOverdueTasksTaskView() }
+    }
+
+    fun getCompletedTodayTasksForHomePage(): List<CompletedTodayTasksTaskView> {
+        return (TaskCompletions innerJoin Tasks)
+            .slice(Tasks.id, Tasks.name)
+            .select { TaskCompletions.completionTimestamp.date() eq today() }
+            .map { it.toCompletedTodayTasksTaskView() }
     }
 }

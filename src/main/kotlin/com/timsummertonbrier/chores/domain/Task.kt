@@ -27,3 +27,8 @@ data class OverdueTasksTaskView(
     val name: String,
     val daysOverdue: Int
 )
+
+data class CompletedTodayTasksTaskView(
+    val id: Int,
+    val name: String
+)
