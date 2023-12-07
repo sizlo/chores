@@ -38,10 +38,14 @@ class TaskCompletionRepositoryTest {
 
             val base = now()
 
-            val ignoredBecauseNotLatest1 = addCompletion(completionTimestamp = base.plus(1.days), wasAutocomplete = false)
+            // ignoredBecauseNotLatest
+            addCompletion(completionTimestamp = base.plus(1.days), wasAutocomplete = false)
+            // this one should be selected
             val expected = addCompletion(completionTimestamp = base.plus(2.days), wasAutocomplete = false)
-            val ignoredBecauseNotLatest2 = addCompletion(completionTimestamp = base.plus(1.days), wasAutocomplete = false)
-            val ignoredBecauseAutocomplete = addCompletion(completionTimestamp = base.plus(3.days), wasAutocomplete = true)
+            // ignoredBecauseNotLatest
+            addCompletion(completionTimestamp = base.plus(1.days), wasAutocomplete = false)
+            // ignoredBecauseAutocomplete
+            addCompletion(completionTimestamp = base.plus(3.days), wasAutocomplete = true)
 
             val actual = testSubject.findLatestNonAutoCompletionForTaskId(taskId!!)
 
