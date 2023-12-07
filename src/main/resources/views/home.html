@@ -6,7 +6,7 @@
     <body>
         <section>
             <h1>Home</h1>
-            <h2>Overdue tasks</h2>
+            <h2>Overdue tasks<span th:if="${!overdueTasks.isEmpty()}" th:text="| (${overdueTasks.size})|"></span></h2>
             <div th:if="${overdueTasks.isEmpty()}">No overdue tasks!</div>
             <div th:if="${!overdueTasks.isEmpty()}">
                 <div th:each="task : ${overdueTasks}">
@@ -20,7 +20,7 @@
             </div>
 
             <div th:if="${!completedTodayTasks.isEmpty()}">
-                <h2>Completed today</h2>
+                <h2>Completed today (<span th:text="${completedTodayTasks.size}"></span>)</h2>
                 <div th:each="task : ${completedTodayTasks}">
                     <span th:text="${task.name}"></span>
                     <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
