@@ -106,6 +106,16 @@ class DevDefaultDataInserter(
             )
         )
 
+        taskRepository.addTask(
+            TaskRequest(
+                name = "to-be-autocompleted",
+                dueDate = today().minus(DatePeriod(days = 1)).toString(),
+                autocomplete = true,
+                triggerType = TriggerType.FIXED_DELAY.name,
+                daysBetween = "20",
+            )
+        )
+
         val completedTodayTaskId = taskRepository.addTask(
             TaskRequest(
                 name = "completed-today",

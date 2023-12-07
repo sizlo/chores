@@ -165,6 +165,13 @@ class TaskRepository {
             .map { it.toCompletedTodayTasksTaskView() }
     }
 
+    fun getOverdueAutocompleteTaskIds(): List<Int> {
+        return Tasks
+            .slice(Tasks.id)
+            .select { Tasks.dueDate lessEq today() and Tasks.autocomplete eq Op.TRUE }
+            .map { it[Tasks.id].value }
+    }
+
     private fun wasCompletedToday(): Op<Boolean> {
         val startOfToday = now().atStartOfDay()
         val startOfTomorrow = startOfToday.plus(1.days)
