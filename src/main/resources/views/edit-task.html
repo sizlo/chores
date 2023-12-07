@@ -6,9 +6,9 @@
   <body>
     <section>
       <h1>Edit Task</h1>
-      <form action="#" th:action="@{/tasks/{id}/edit(id = ${id})}" method="post">
+      <form action="#" th:action="@{/tasks/{id}/edit(id = ${id})}" method="post" onsubmit="disableSubmitButtons()">
         <div th:replace="~{fragments/task-fields :: task-fields(${taskRequest})}"></div>
-        <input type="submit" value="Update task" />
+        <input th:replace="~{fragments/disabling-submit :: disabling-submit('Update task')}" />
       </form>
     </section>
   </body>

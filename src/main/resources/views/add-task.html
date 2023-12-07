@@ -6,9 +6,9 @@
   <body>
     <section>
       <h1>Add Task</h1>
-      <form action="#" th:action="@{/tasks/add}" method="post">
+      <form action="#" th:action="@{/tasks/add}" method="post" onsubmit="disableSubmitButtons()">
         <div th:replace="~{fragments/task-fields :: task-fields(${taskRequest})}"></div>
-        <input type="submit" value="Add task" />
+        <input th:replace="~{fragments/disabling-submit :: disabling-submit('Add task')}" />
       </form>
     </section>
   </body>

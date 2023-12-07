@@ -4,6 +4,15 @@
         <title th:text="|${title} - Chores|"></title>
         <link th:href="@{/global.css}" rel="stylesheet" />
         <link th:if="${cssFile}" th:href="${cssFile}" rel="stylesheet" />
+
+        <script type="text/javascript">
+            function disableSubmitButtons() {
+                const elements = document.getElementsByClassName("disabling-submit")
+                for (i = 0; i < elements.length; i++) {
+                    elements[i].disabled = true
+                }
+            }
+        </script>
     </head>
     <body>
     <div class="header">

@@ -8,11 +8,11 @@
             <h1>Task Details</h1>
             <div>
                 <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}/edit(id=${task.id})}, 'Edit task')}"></form>
-                <form action="#" th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" class="inline">
+                <form action="#" th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" class="inline" onsubmit="disableSubmitButtons()">
                     <input type="button" value="Delete task" onclick="showDeletePrompt()" />
                     <span id="delete-prompt" style="display:none">
                         <span>Are you sure?</span>
-                        <input type="submit" value="Yes!" />
+                        <input th:replace="~{fragments/disabling-submit :: disabling-submit('Yes!')}" />
                     </span>
                 </form>
             </div>

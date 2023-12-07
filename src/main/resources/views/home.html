@@ -13,8 +13,8 @@
                     <span th:text="${task.name}"></span>
                     <span th:text="${task.daysOverdue}"></span>
                     <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
-                    <form action="#" th:action="@{/tasks/{id}/complete(id=${task.id})}" method="post" class="inline">
-                        <input type="submit" value="Complete" />
+                    <form action="#" th:action="@{/tasks/{id}/complete(id=${task.id})}" method="post" class="inline" onsubmit="disableSubmitButtons()">
+                        <input th:replace="~{fragments/disabling-submit :: disabling-submit('Complete')}" />
                     </form>
                 </div>
             </div>
@@ -24,8 +24,8 @@
                 <div th:each="task : ${completedTodayTasks}">
                     <span th:text="${task.name}"></span>
                     <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
-                    <form action="#" th:action="@{/tasks/{id}/uncomplete(id=${task.id})}" method="post" class="inline">
-                        <input type="submit" value="Uncomplete" />
+                    <form action="#" th:action="@{/tasks/{id}/uncomplete(id=${task.id})}" method="post" class="inline" onsubmit="disableSubmitButtons()">
+                        <input th:replace="~{fragments/disabling-submit :: disabling-submit('Uncomplete')}" />
                     </form>
                 </div>
             </div>
