@@ -5,15 +5,45 @@
 )}" xmlns:th="http://www.thymeleaf.org">
   <body>
     <section>
-      <h1>All Tasks<span th:if="${!tasks.isEmpty()}" th:text="| (${tasks.size})|"></span></h1>
-      <p th:if="${tasks.isEmpty()}">No tasks yet!</p>
-      <block th:if="${!tasks.isEmpty()}">
-        <div th:each="task : ${tasks}">
-          <span th:text="${task.name}"></span>
-          <span th:text="${task.dueDate}"></span>
-          <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
+      <div class="container">
+        <h1>All Tasks<span th:if="${!tasks.isEmpty()}" th:text="| (${tasks.size})|"></span></h1>
+
+        <div th:if="${tasks.isEmpty()}">No tasks yet!</div>
+
+        <div th:if="${!tasks.isEmpty()}">
+
+          <div class="pb-2 d-flex align-items-center gap-2">
+            <label for="filter">Filter</label>
+            <input class="w-100" type="text" name="filter" id="filter" onkeyup="filterTasks(this)" />
+          </div>
+
+          <div class="list-group" th:if="${!tasks.isEmpty()}">
+            <a th:each="task : ${tasks}"
+               th:href="@{/tasks/{id}(id=${task.id})}"
+               class="list-group-item list-group-item-action">
+              <div th:text="${task.name}"></div>
+              <div th:if="${task.dueDate != null}" class="text-secondary" th:text="|Next due on ${task.dueDate}|"></div>
+              <div th:if="${task.dueDate == null}" class="text-secondary">No due date</div>
+            </a>
+          </div>
+
         </div>
-      </block>
+      </div>
+
+      <script type="text/javascript">
+        function filterTasks(filterElement) {
+          const filterText = filterElement.value
+
+          const taskElements = document.getElementsByClassName("list-group-item")
+          for (i = 0; i < taskElements.length; i++) {
+            if (taskElements[i].innerText.includes(filterText)) {
+              taskElements[i].classList.remove("visually-hidden")
+            } else {
+              taskElements[i].classList.add("visually-hidden")
+            }
+          }
+        }
+      </script>
     </section>
   </body>
 </html>
