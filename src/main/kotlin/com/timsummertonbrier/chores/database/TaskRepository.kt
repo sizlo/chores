@@ -163,6 +163,7 @@ class TaskRepository {
         return Tasks
             .slice(Tasks.id, Tasks.name, Tasks.dueDate)
             .selectAll()
+            .orderBy(Tasks.name to SortOrder.ASC)
             .map { it.toAllTasksTaskView() }
     }
 
@@ -170,6 +171,10 @@ class TaskRepository {
         return Tasks
             .slice(Tasks.id, Tasks.name, Tasks.dueDate)
             .select { isOverdue() }
+            .orderBy(
+                Tasks.dueDate to SortOrder.ASC,
+                Tasks.name to SortOrder.ASC,
+            )
             .map { it.toOverdueTasksTaskView() }
     }
 
@@ -178,6 +183,7 @@ class TaskRepository {
             .slice(TaskCompletions.id, Tasks.id, Tasks.name)
             .select { wasCompletedToday() }
             .andWhere { TaskCompletions.wasAutocomplete eq Op.FALSE }
+            .orderBy(Tasks.name to SortOrder.ASC)
             .map { it.toCompletedTodayTasksTaskView() }
     }
 

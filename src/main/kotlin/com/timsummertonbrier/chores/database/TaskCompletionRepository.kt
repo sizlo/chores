@@ -86,7 +86,7 @@ class TaskCompletionRepository {
             )
             .select { TaskCompletions.taskId eq taskId }
             .andWhere { TaskCompletions.wasAutocomplete eq Op.FALSE }
-            .orderBy(TaskCompletions.completionTimestamp, SortOrder.DESC)
+            .orderBy(TaskCompletions.completionTimestamp to SortOrder.DESC)
             .limit(1)
             .map { it.toCompletion() }
             .first()
