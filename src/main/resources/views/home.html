@@ -5,28 +5,52 @@
 )}" xmlns:th="http://www.thymeleaf.org">
     <body>
         <section>
-            <h1>Home</h1>
-            <h2>Overdue tasks<span th:if="${!overdueTasks.isEmpty()}" th:text="| (${overdueTasks.size})|"></span></h2>
-            <div th:if="${overdueTasks.isEmpty()}">No overdue tasks!</div>
-            <div th:if="${!overdueTasks.isEmpty()}">
-                <div th:each="task : ${overdueTasks}">
-                    <span th:text="${task.name}"></span>
-                    <span th:text="${task.daysOverdue}"></span>
-                    <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
-                    <form action="#" th:action="@{/tasks/{id}/complete(id=${task.id})}" method="post" class="inline" onsubmit="disableSubmitButtons()">
-                        <input th:replace="~{fragments/disabling-submit :: disabling-submit('Complete')}" />
-                    </form>
-                </div>
-            </div>
+            <div class="container d-flex flex-column gap-4">
+                <div>
+                    <h1>Overdue tasks<span th:if="${!overdueTasks.isEmpty()}" th:text="| (${overdueTasks.size})|"></span></h1>
 
-            <div th:if="${!completedTodayTasks.isEmpty()}">
-                <h2>Completed today (<span th:text="${completedTodayTasks.size}"></span>)</h2>
-                <div th:each="task : ${completedTodayTasks}">
-                    <span th:text="${task.name}"></span>
-                    <form th:replace="~{fragments/link-button :: link-button(@{/tasks/{id}(id=${task.id})}, 'View details')}"></form>
-                    <form action="#" th:action="@{/tasks/{id}/uncomplete(id=${task.id})}" method="post" class="inline" onsubmit="disableSubmitButtons()">
-                        <input th:replace="~{fragments/disabling-submit :: disabling-submit('Uncomplete')}" />
-                    </form>
+                    <div th:if="${overdueTasks.isEmpty()}">No overdue tasks!</div>
+
+                    <div class="list-group" th:if="${!overdueTasks.isEmpty()}">
+                        <a th:each="task : ${overdueTasks}"
+                           th:href="@{/tasks/{id}(id=${task.id})}"
+                           class="list-group-item list-group-item-action d-flex align-items-center gap-3">
+
+                            <div class="w-100">
+                                <div th:text="${task.name}"></div>
+                                <div class="text-secondary" th:text="|${task.daysOverdue} days overdue|"></div>
+                            </div>
+
+                            <form action="#"
+                                  th:action="@{/tasks/{id}/complete(id=${task.id})}"
+                                  method="post"
+                                  onsubmit="disableSubmitButtons()">
+                                <input th:replace="~{fragments/disabling-submit :: disabling-submit('Complete')}" />
+                            </form>
+
+                        </a>
+                    </div>
+                </div>
+
+                <div th:if="${!completedTodayTasks.isEmpty()}">
+                    <h1>Completed today (<span th:text="${completedTodayTasks.size}"></span>)</h1>
+
+                    <div class="list-group">
+                        <a th:each="task : ${completedTodayTasks}"
+                           th:href="@{/tasks/{id}(id=${task.id})}"
+                           class="list-group-item list-group-item-action d-flex align-items-center gap-3">
+
+                            <div class="w-100" th:text="${task.name}"></div>
+
+                            <form action="#"
+                                  th:action="@{/tasks/{id}/uncomplete(id=${task.id})}"
+                                  method="post"
+                                  onsubmit="disableSubmitButtons()">
+                                <input th:replace="~{fragments/disabling-submit :: disabling-submit('Uncomplete')}" />
+                            </form>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </section>

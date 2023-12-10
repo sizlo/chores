@@ -27,7 +27,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "due-yesterday-fixed",
+                name = "due yesterday fixed",
                 dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
@@ -37,7 +37,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "due-yesterday-weekly",
+                name = "due yesterday weekly",
                 dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.WEEKLY.name,
@@ -47,7 +47,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "due-yesterday-monthly",
+                name = "due yesterday monthly",
                 dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.MONTHLY.name,
@@ -57,7 +57,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "due-yesterday-yearly",
+                name = "due yesterday yearly",
                 dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.YEARLY.name,
@@ -68,7 +68,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "due-yesterday-one-off",
+                name = "due yesterday one off",
                 dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.ONE_OFF.name,
@@ -77,7 +77,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "due-today",
+                name = "due today",
                 dueDate = today().toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
@@ -87,7 +87,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "due-tomorrow",
+                name = "due tomorrow",
                 dueDate = today().plus(DatePeriod(days = 1)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
@@ -97,7 +97,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "no-due-date",
+                name = "no due date",
                 dueDate = null,
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
@@ -107,7 +107,7 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "to-be-autocompleted",
+                name = "to be autocompleted",
                 dueDate = today().minus(DatePeriod(days = 1)).toString(),
                 autocomplete = true,
                 triggerType = TriggerType.FIXED_DELAY.name,
@@ -115,9 +115,19 @@ class DefaultDataInserter(
             )
         )
 
+        taskRepository.addTask(
+            TaskRequest(
+                name = "an overdue task with a very long name to see how our styling copes with lots of text which may need to wrap onto a new line",
+                dueDate = today().minus(DatePeriod(days = 300)).toString(),
+                autocomplete = false,
+                triggerType = TriggerType.FIXED_DELAY.name,
+                daysBetween = "20",
+            )
+        )
+
         val completedTodayTaskId = taskRepository.addTask(
             TaskRequest(
-                name = "completed-today",
+                name = "completed today",
                 dueDate = today().plus(DatePeriod(days = 10)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
@@ -127,7 +137,7 @@ class DefaultDataInserter(
 
         val completedYesterdayTaskId = taskRepository.addTask(
             TaskRequest(
-                name = "completed-yesterday",
+                name = "completed yesterday",
                 dueDate = today().plus(DatePeriod(days = 10)).toString(),
                 autocomplete = false,
                 triggerType = TriggerType.FIXED_DELAY.name,
