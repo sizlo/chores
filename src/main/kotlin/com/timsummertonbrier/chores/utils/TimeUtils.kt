@@ -1,6 +1,7 @@
 package com.timsummertonbrier.chores.utils
 
 import kotlinx.datetime.*
+import java.lang.RuntimeException
 import java.time.DateTimeException
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days
@@ -59,7 +60,47 @@ fun Instant.atStartOfDay(): Instant {
     return this.toJavaInstant().truncatedTo(ChronoUnit.DAYS).toKotlinInstant()
 }
 
-fun addLeadingZero(num: Int): String {
+fun Int.dayName(): String {
+    return when (this) {
+        1 -> "Monday"
+        2 -> "Tuesday"
+        3 -> "Wednesday"
+        4 -> "Thursday"
+        5 -> "Friday"
+        6 -> "Saturday"
+        7 -> "Sunday"
+        else -> throw RuntimeException("Unknown day of week number: $this")
+    }
+}
+
+fun Int.monthName(): String {
+    return when (this) {
+        1 -> "January"
+        2 -> "February"
+        3 -> "March"
+        4 -> "April"
+        5 -> "May"
+        6 -> "June"
+        7 -> "July"
+        8 -> "August"
+        9 -> "September"
+        10 -> "October"
+        11 -> "November"
+        12 -> "December"
+        else -> throw RuntimeException("Unknown day of week number: $this")
+    }
+}
+
+fun Int.indexName(): String {
+    return when (this) {
+        1 -> "1st"
+        2 -> "2nd"
+        3 -> "3rd"
+        else -> "${this}th"
+    }
+}
+
+private fun addLeadingZero(num: Int): String {
     return if (num >= 10 ) {
         num.toString()
     } else {

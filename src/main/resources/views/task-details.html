@@ -29,7 +29,9 @@
                     <div class="list-group-item">
                         <div class="text-secondary">Trigger</div>
                         <div th:text="${task.trigger.friendlyString}"></div>
-                        <div th:replace="~{fragments/note :: note(${task.trigger.note})}"></div>
+                        <div th:if="${task.trigger.note != null}"
+                             class="text-secondary"
+                             th:text="|Note: ${task.trigger.note}|"></div>
                     </div>
 
                     <div class="list-group-item">

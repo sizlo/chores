@@ -2,6 +2,7 @@ package com.timsummertonbrier.chores.domain.validation
 
 import com.timsummertonbrier.chores.domain.TaskRequest
 import com.timsummertonbrier.chores.domain.TriggerType
+import com.timsummertonbrier.chores.utils.monthName
 import io.micronaut.core.annotation.Introspected
 import jakarta.inject.Singleton
 import jakarta.validation.Constraint
@@ -120,7 +121,7 @@ class TriggerParametersValidator
                 val maxDayOfMonth = getMaxDayOfMonth(value.monthOfYear.toInt())
                 if (value.dayOfMonth.isInt() && (value.dayOfMonth.toInt() < 1 || value.dayOfMonth.toInt() > maxDayOfMonth)) {
                     context.addViolation(
-                        "Must be between 1 and $maxDayOfMonth (inclusive) for month ${value.monthOfYear}",
+                        "Must be between 1 and $maxDayOfMonth (inclusive) for ${value.monthOfYear.toInt().monthName()}",
                         propertyName = "dayOfMonth"
                     )
                     valid = false

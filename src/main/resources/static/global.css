@@ -1,12 +1,18 @@
-.inline {
-    display: inline;
-}
-
 textarea {
-    width: 800px;
-    height: 500px;
+    width: 100%;
+    height: 200px;
 }
 
 img {
     width: 100%;
+}
+
+/* Overriding bootstraps switch css as they force the switch to appear on the left */
+.form-switch {
+    padding-left: 0!important;
+}
+.form-check-input {
+    display: block;
+    margin-left: 0!important;
+    font-size: x-large;
 }
