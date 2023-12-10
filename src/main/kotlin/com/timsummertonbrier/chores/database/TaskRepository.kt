@@ -87,6 +87,7 @@ fun ResultRow.toAllTasksTaskView(): AllTasksTaskView {
         this[Tasks.id].value,
         this[Tasks.name],
         this[Tasks.dueDate],
+        this[TaskTriggers.triggerType]
     )
 }
 
@@ -160,8 +161,8 @@ class TaskRepository {
     }
 
     fun getAllTasksForAllTasksPage(): List<AllTasksTaskView> {
-        return Tasks
-            .slice(Tasks.id, Tasks.name, Tasks.dueDate)
+        return (Tasks innerJoin TaskTriggers)
+            .slice(Tasks.id, Tasks.name, Tasks.dueDate, TaskTriggers.triggerType)
             .selectAll()
             .orderBy(Tasks.name to SortOrder.ASC)
             .map { it.toAllTasksTaskView() }

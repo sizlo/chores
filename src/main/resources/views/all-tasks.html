@@ -22,8 +22,11 @@
                th:href="@{/tasks/{id}(id=${task.id})}"
                class="list-group-item list-group-item-action">
               <div th:text="${task.name}"></div>
-              <div th:if="${task.dueDate != null}" class="text-secondary" th:text="|Next due on ${task.dueDate}|"></div>
-              <div th:if="${task.dueDate == null}" class="text-secondary">No due date</div>
+              <div class="row text-secondary">
+                <div class="col-2" th:text="${task.triggerType.friendlyName}"></div>
+                <div th:if="${task.dueDate != null}" class="col" th:text="|Next due on ${task.dueDate}|"></div>
+                <div th:if="${task.dueDate == null}" class="col">No due date</div>
+              </div>
             </a>
           </div>
 
@@ -36,7 +39,7 @@
 
           const taskElements = document.getElementsByClassName("list-group-item")
           for (i = 0; i < taskElements.length; i++) {
-            if (taskElements[i].innerText.includes(filterText)) {
+            if (taskElements[i].innerText.toLowerCase().includes(filterText.toLowerCase())) {
               taskElements[i].classList.remove("visually-hidden")
             } else {
               taskElements[i].classList.add("visually-hidden")

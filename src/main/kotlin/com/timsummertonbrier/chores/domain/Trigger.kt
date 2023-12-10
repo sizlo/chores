@@ -136,12 +136,12 @@ data class OneOffTrigger(val dummyProperty: String = "data classes must have at 
     override fun calculateNextDueDate() = null
 }
 
-enum class TriggerType {
-    FIXED_DELAY,
-    WEEKLY,
-    MONTHLY,
-    YEARLY,
-    ONE_OFF,
+enum class TriggerType(val friendlyName: String) {
+    FIXED_DELAY("Fixed delay"),
+    WEEKLY("Weekly"),
+    MONTHLY("Monthly"),
+    YEARLY("Yearly"),
+    ONE_OFF("One off"),
 }
 
 private fun Int.dayName(): String {
