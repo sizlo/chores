@@ -131,7 +131,13 @@
         }
 
         function getSelectedTriggerType() {
-          return document.querySelector('input[name="triggerType"]:checked')?.value;
+          const elements = document.getElementsByName("triggerType");
+          for (i = 0; i < elements.length; i++) {
+            if (elements[i].checked) {
+              return elements[i].value
+            }
+          }
+          return null
         }
 
         function hideElementsWithClass(className) {
