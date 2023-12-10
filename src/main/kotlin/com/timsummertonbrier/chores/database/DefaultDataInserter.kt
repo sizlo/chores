@@ -145,6 +145,7 @@ class DefaultDataInserter(
             )
         )
 
+        // To be used by uncomplete
         taskCompletionRepository.addCompletion(
             Completion(
                 taskId = completedTodayTaskId,
@@ -154,6 +155,7 @@ class DefaultDataInserter(
             )
         )
 
+        // To be ignored by uncomplete because it is not the latest
         taskCompletionRepository.addCompletion(
             Completion(
                 taskId = completedTodayTaskId,
@@ -163,6 +165,7 @@ class DefaultDataInserter(
             )
         )
 
+        // To be ignored by uncomplete because it is an autocomplete
         taskCompletionRepository.addCompletion(
             Completion(
                 taskId = completedTodayTaskId,
