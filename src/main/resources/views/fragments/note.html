@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <div th:fragment="note(text)" class="text-secondary"  th:if="${text != null}" th:text="|Note: ${text}|"></div>
+    </body>
+</html>

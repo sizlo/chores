@@ -6,3 +6,7 @@ textarea {
     width: 800px;
     height: 500px;
 }
+
+img {
+    width: 100%;
+}

@@ -62,7 +62,7 @@
       <div class="triggerParameter MONTHLY YEARLY">
         <label for="dayOfMonth">Day of month</label>
         <input type="text" name="dayOfMonth" id="dayOfMonth" th:value="${taskRequest.dayOfMonth}" onkeyup="onDayOfMonthChange()" />
-        <div id="dayOfMonthNote" class="visually-hidden">Note: For months with more than 28 days the task will be due on the last day of the month</div>
+        <div id="dayOfMonthNote" class="visually-hidden">Note: For months with less than 28 days the task will be triggered on the last day of the month</div>
         <div th:replace="~{fragments/field-errors :: field-errors('dayOfMonth', ${errors})}"></div>
       </div>
       <div>
@@ -126,7 +126,7 @@
 
           if (isMonthlyTriggerType && isMoreThan28thDayOfMonth) {
             noteElement.classList.remove("visually-hidden")
-            noteElement.innerText = `Note: For months with more than ${dayOfMonthElement.value} days the task will be due on the last day of the month`
+            noteElement.innerText = `Note: For months with less than ${dayOfMonthElement.value} days the task will be triggered on the last day of the month`
           } else {
             noteElement.classList.add("visually-hidden")
           }
