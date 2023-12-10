@@ -62,7 +62,7 @@
       <div class="triggerParameter MONTHLY YEARLY">
         <label for="dayOfMonth">Day of month</label>
         <input type="text" name="dayOfMonth" id="dayOfMonth" th:value="${taskRequest.dayOfMonth}" onkeyup="onDayOfMonthChange()" />
-        <div id="dayOfMonthNote" style="display: none;">Note: For months with more than 28 days the task will be due on the last day of the month</div>
+        <div id="dayOfMonthNote" class="visually-hidden">Note: For months with more than 28 days the task will be due on the last day of the month</div>
         <div th:replace="~{fragments/field-errors :: field-errors('dayOfMonth', ${errors})}"></div>
       </div>
       <div>
@@ -92,16 +92,23 @@
           const triggerType = triggerTypeElement.value
 
           // Hide all parameter elements
-          setDisplayOnElementsWithClass("triggerParameter", "none")
+          hideElementsWithClass("triggerParameter")
 
           // Show the relevant ones
-          setDisplayOnElementsWithClass(triggerType, "block")
+          unhideElementsWithClass(triggerType)
         }
 
-        function setDisplayOnElementsWithClass(className, display) {
+        function hideElementsWithClass(className) {
           const elements = document.getElementsByClassName(className)
           for (i = 0; i < elements.length; i++) {
-            elements[i].style.display = display
+            elements[i].classList.add("visually-hidden")
+          }
+        }
+
+        function unhideElementsWithClass(className) {
+          const elements = document.getElementsByClassName(className)
+          for (i = 0; i < elements.length; i++) {
+            elements[i].classList.remove("visually-hidden")
           }
         }
 
@@ -118,10 +125,10 @@
           const isMoreThan28thDayOfMonth = dayOfMonthElement.value > 28
 
           if (isMonthlyTriggerType && isMoreThan28thDayOfMonth) {
-            noteElement.style.display = "block"
+            noteElement.classList.remove("visually-hidden")
             noteElement.innerText = `Note: For months with more than ${dayOfMonthElement.value} days the task will be due on the last day of the month`
           } else {
-            noteElement.style.display = "none"
+            noteElement.classList.add("visually-hidden")
           }
         }
 
