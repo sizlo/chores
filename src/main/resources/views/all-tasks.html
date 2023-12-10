@@ -14,7 +14,7 @@
 
           <div class="pb-2 d-flex align-items-center gap-2">
             <label for="filter">Filter</label>
-            <input class="w-100" type="text" name="filter" id="filter" onkeyup="filterTasks(this)" />
+            <input class="form-control w-100" type="text" name="filter" id="filter" onkeyup="filterTasks(this)" />
           </div>
 
           <div class="list-group" th:if="${!tasks.isEmpty()}">
