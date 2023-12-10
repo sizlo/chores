@@ -84,7 +84,7 @@
       </div>
       <div th:if="${errors != null && !errors.classErrors.isEmpty()}">
         <div>Errors:</div>
-        <div th:each="error : ${errors.classErrors}" th:text="${error}" class="error"></div>
+        <div th:each="error : ${errors.classErrors}" th:text="${error}" class="text-danger"></div>
       </div>
 
       <script type="text/javascript">

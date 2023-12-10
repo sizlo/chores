@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html th:fragment="layout" xmlns:th="http://www.thymeleaf.org">
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title th:text="|${title} - Chores|"></title>
         <link th:href="@{/global.css}" rel="stylesheet" />
         <link th:if="${cssFile}" th:href="${cssFile}" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
         <script type="text/javascript">
             function disableSubmitButtons() {
@@ -15,14 +17,24 @@
         </script>
     </head>
     <body>
-    <div class="header">
-        <a href="/">Home</a>
-        <a href="/tasks/add">Add task</a>
-        <a href="/tasks">All tasks</a>
-        <span th:text="${buildInfo}"></span>
-    </div>
+        <div class="container">
+            <header class="d-flex justify-content-center py-3">
+                <ul class="nav nav-pills">
+                    <li th:replace="~{fragments/nav-item :: nav-item('/', 'Home', ${title})}"></li>
+                    <li th:replace="~{fragments/nav-item :: nav-item('/tasks/add', 'Add task', ${title})}"></li>
+                    <li th:replace="~{fragments/nav-item :: nav-item('/tasks', 'All tasks', ${title})}"></li>
+                </ul>
+            </header>
+        </div>
         <div th:replace="${content}">
             <p>Layout content</p>
+        </div>
+        <div class="container">
+            <footer class="d-flex justify-content-between align-items-center py-3 my-4 border-top text-muted">
+                <p class="col" th:text="|version: ${appVersion}|"></p>
+                <p class="col" th:text="|running on: ${appEnvironment}|"></p>
+                <p class="col" th:text="|database: ${databaseEnvironment}|"></p>
+            </footer>
         </div>
     </body>
 </html>

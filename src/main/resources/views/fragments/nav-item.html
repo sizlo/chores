@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <li th:fragment="nav-item(link, page, activePage)" class="nav-item">
+            <a th:href="${link}" class="nav-link" th:classappend="${page == activePage ? 'active' : ''}" th:text="${page}"></a>
+        </li>
+    </body>
+</html>

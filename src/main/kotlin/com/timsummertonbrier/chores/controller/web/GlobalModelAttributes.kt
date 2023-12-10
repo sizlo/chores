@@ -21,7 +21,9 @@ class GlobalModelAttributes (
         }
 
         modelAndView.addToModel(mapOf(
-            "buildInfo" to "$appVersion - framework: micronaut - running on: $appEnvironment - database: $databaseEnvironment"
+            "appVersion" to appVersion,
+            "appEnvironment" to appEnvironment,
+            "databaseEnvironment" to databaseEnvironment,
         ))
     }
 

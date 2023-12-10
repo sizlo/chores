@@ -3,7 +3,7 @@
     <body>
         <div th:fragment="field-errors(fieldName, errors)">
             <div th:if="${errors != null && errors.fieldErrors.containsKey(fieldName)}">
-                <div th:each="error : ${errors.fieldErrors[fieldName]}" th:text="${error}" class="error"></div>
+                <div th:each="error : ${errors.fieldErrors[fieldName]}" th:text="${error}" class="text-danger"></div>
             </div>
         </div>
     </body>
