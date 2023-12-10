@@ -93,7 +93,7 @@ fun ResultRow.toOverdueTasksTaskView(): OverdueTasksTaskView {
     return OverdueTasksTaskView(
         this[Tasks.id].value,
         this[Tasks.name],
-        this[Tasks.dueDate]!!.daysUntil(today()),
+        this[Tasks.dueDate]!!,
     )
 }
 

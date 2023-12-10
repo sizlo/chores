@@ -1,8 +1,10 @@
 package com.timsummertonbrier.chores.domain
 
+import com.timsummertonbrier.chores.utils.today
 import io.micronaut.serde.annotation.Serdeable
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
 
 @Serdeable
 data class Task(
@@ -27,8 +29,11 @@ data class AllTasksTaskView(
 data class OverdueTasksTaskView(
     val id: Int,
     val name: String,
-    val daysOverdue: Int
-)
+    val dueDate: LocalDate
+) {
+    private val overdueDays = dueDate.daysUntil(today())
+    val overdueText = "$overdueDays ${if (overdueDays == 1) "day" else "days"} overdue"
+}
 
 @Serdeable
 data class CompletedTodayTasksTaskView(
