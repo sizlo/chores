@@ -65,7 +65,9 @@
                     }
 
                     const markdownSource = document.getElementById("hidden-description").innerHTML
-                    document.getElementById("markdown-description").innerHTML = marked.parse(markdownSource)
+                    if (markdownSource) {
+                        document.getElementById("markdown-description").innerHTML = marked.parse(markdownSource)
+                    }
                 </script>
             </div>
         </section>
