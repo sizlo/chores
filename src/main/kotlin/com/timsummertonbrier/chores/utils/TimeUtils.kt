@@ -3,6 +3,7 @@ package com.timsummertonbrier.chores.utils
 import kotlinx.datetime.*
 import java.time.DateTimeException
 import java.time.temporal.ChronoUnit
+import kotlin.time.Duration.Companion.days
 
 fun today(): LocalDate {
     return Clock.System.todayIn(TimeZone.currentSystemDefault())
@@ -10,6 +11,22 @@ fun today(): LocalDate {
 
 fun now(): Instant {
     return Clock.System.now()
+}
+
+fun LocalDate.plusDays(days: Int): LocalDate {
+    return this.plus(DatePeriod(days = days))
+}
+
+fun LocalDate.minusDays(days: Int): LocalDate {
+    return this.minus(DatePeriod(days = days))
+}
+
+fun LocalDate.plusMonths(months: Int): LocalDate {
+    return this.plus(DatePeriod(months = months))
+}
+
+fun LocalDate.plusYears(years: Int): LocalDate {
+    return this.plus(DatePeriod(years = years))
 }
 
 fun LocalDate.withDayOfMonth(dayOfMonth: Int): LocalDate {
@@ -27,7 +44,15 @@ fun LocalDate.withMonthAndDayOfMonth(month: Int, dayOfMonth: Int): LocalDate {
 }
 
 fun LocalDate.lastDayOfMonth(): LocalDate {
-    return this.plus(DatePeriod(months = 1)).withDayOfMonth(1).minus(DatePeriod(days = 1))
+    return this.plusMonths(1).withDayOfMonth(1).minusDays(1)
+}
+
+fun Instant.plusDays(days: Int): Instant {
+    return this.plus(days.days)
+}
+
+fun Instant.minusDays(days: Int): Instant {
+    return this.minus(days.days)
 }
 
 fun Instant.atStartOfDay(): Instant {

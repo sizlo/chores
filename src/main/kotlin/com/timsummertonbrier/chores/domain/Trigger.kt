@@ -1,9 +1,6 @@
 package com.timsummertonbrier.chores.domain
 
-import com.timsummertonbrier.chores.utils.lastDayOfMonth
-import com.timsummertonbrier.chores.utils.today
-import com.timsummertonbrier.chores.utils.withDayOfMonth
-import com.timsummertonbrier.chores.utils.withMonthAndDayOfMonth
+import com.timsummertonbrier.chores.utils.*
 import io.micronaut.serde.annotation.Serdeable
 import kotlinx.datetime.*
 import java.time.DateTimeException
@@ -18,7 +15,7 @@ data class FixedDelayTrigger(val daysBetween: Int) : Trigger {
     override val triggerType = TriggerType.FIXED_DELAY
 
     override fun calculateNextDueDate(): LocalDate {
-        return today().plus(DatePeriod(days = daysBetween))
+        return today().plusDays(daysBetween)
     }
 }
 
@@ -33,7 +30,7 @@ data class WeeklyTrigger(val dayOfWeek: Int) : Trigger {
             todaysDayOfWeek == dayOfWeek -> 7
             else -> (7 - (todaysDayOfWeek - dayOfWeek)) % 7
         }
-        return today.plus(DatePeriod(days = daysToAdd))
+        return today.plusDays(daysToAdd)
     }
 }
 
@@ -56,7 +53,7 @@ data class MonthlyTrigger(val dayOfMonth: Int) : Trigger {
         return if (targetDateThisMonth > today) {
             targetDateThisMonth
         } else {
-            targetDateThisMonth.plus(DatePeriod(months = 1))
+            targetDateThisMonth.plusMonths(1)
         }
     }
 
@@ -90,7 +87,7 @@ data class YearlyTrigger(val monthOfYear: Int, val dayOfMonth: Int) : Trigger {
         return if (targetDateThisYear > today) {
             targetDateThisYear
         } else {
-            targetDateThisYear.plus(DatePeriod(years = 1))
+            targetDateThisYear.plusYears(1)
         }
     }
 
@@ -99,7 +96,7 @@ data class YearlyTrigger(val monthOfYear: Int, val dayOfMonth: Int) : Trigger {
         return if (lastDayOfFebThisYear > today) {
             lastDayOfFebThisYear
         } else {
-            lastDayOfFebThisYear.plus(DatePeriod(years = 1)).lastDayOfMonth()
+            lastDayOfFebThisYear.plusYears(1).lastDayOfMonth()
         }
     }
 }

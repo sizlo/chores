@@ -84,7 +84,8 @@ class TaskCompletionRepository {
                 TaskCompletions.dueDateWhenCompleted,
                 TaskCompletions.wasAutocomplete
             )
-            .select { TaskCompletions.taskId eq taskId and TaskCompletions.wasAutocomplete eq Op.FALSE }
+            .select { TaskCompletions.taskId eq taskId }
+            .andWhere { TaskCompletions.wasAutocomplete eq Op.FALSE }
             .orderBy(TaskCompletions.completionTimestamp, SortOrder.DESC)
             .limit(1)
             .map { it.toCompletion() }

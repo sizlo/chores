@@ -3,6 +3,6 @@ app:
 
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/chores
+    url: jdbc:postgresql://localhost:5432/chores?currentSchema=test
     username: local-user
     password: local-password
