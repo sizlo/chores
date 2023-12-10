@@ -5,7 +5,7 @@
 )}" xmlns:th="http://www.thymeleaf.org">
     <body>
         <section>
-            <div class="container d-flex flex-column gap-4">
+            <div class="container d-flex flex-column">
                 <div>
                     <h1>Overdue tasks<span th:if="${!overdueTasks.isEmpty()}" th:text="| (${overdueTasks.size})|"></span></h1>
 
@@ -14,7 +14,7 @@
                     <div class="list-group" th:if="${!overdueTasks.isEmpty()}">
                         <a th:each="task : ${overdueTasks}"
                            th:href="@{/tasks/{id}(id=${task.id})}"
-                           class="list-group-item list-group-item-action d-flex align-items-center gap-3">
+                           class="list-group-item list-group-item-action d-flex align-items-center">
 
                             <div class="w-100">
                                 <div th:text="${task.name}"></div>
@@ -32,13 +32,13 @@
                     </div>
                 </div>
 
-                <div th:if="${!completedTodayTasks.isEmpty()}">
+                <div th:if="${!completedTodayTasks.isEmpty()}" class="mt-4">
                     <h1>Completed today (<span th:text="${completedTodayTasks.size}"></span>)</h1>
 
                     <div class="list-group">
                         <a th:each="task : ${completedTodayTasks}"
                            th:href="@{/tasks/{id}(id=${task.id})}"
-                           class="list-group-item list-group-item-action d-flex align-items-center gap-3">
+                           class="list-group-item list-group-item-action d-flex align-items-center">
 
                             <div class="w-100" th:text="${task.name}"></div>
 

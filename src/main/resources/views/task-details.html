@@ -7,9 +7,9 @@
         <section>
             <div class="container">
                 <h1 th:text="${task.name}">Task Details</h1>
-                <div class="d-flex gap-4 pb-2">
-                    <a th:href="@{/tasks/{id}/edit(id=${task.id})}" class="btn btn-outline-primary pr-4">Edit</a>
-                    <form action="#" th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" onsubmit="disableSubmitButtons()">
+                <div class="d-flex pb-2">
+                    <a th:href="@{/tasks/{id}/edit(id=${task.id})}" class="btn btn-outline-primary">Edit</a>
+                    <form action="#" th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" onsubmit="disableSubmitButtons()" class="mx-4">
                         <input class="btn btn-outline-primary" type="button" value="Delete" onclick="showDeletePrompt()" />
                         <span id="delete-prompt" class="visually-hidden">
                             <span>Are you sure?</span>

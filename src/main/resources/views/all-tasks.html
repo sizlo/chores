@@ -12,8 +12,9 @@
 
         <div th:if="${!tasks.isEmpty()}">
 
-          <div class="pb-2 d-flex align-items-center gap-2">
+          <div class="pb-2 d-flex align-items-center">
             <label for="filter">Filter</label>
+            <div class="mx-1"></div>
             <input class="form-control w-100" type="text" name="filter" id="filter" onkeyup="filterTasks(this)" />
           </div>
 
