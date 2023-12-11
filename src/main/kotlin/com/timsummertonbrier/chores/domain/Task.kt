@@ -1,5 +1,6 @@
 package com.timsummertonbrier.chores.domain
 
+import com.timsummertonbrier.chores.service.MarkdownToHtmlParser
 import com.timsummertonbrier.chores.utils.today
 import io.micronaut.serde.annotation.Serdeable
 import kotlinx.datetime.Instant
@@ -16,7 +17,11 @@ data class Task(
     val createdTimestamp: Instant,
     val updatedTimestamp: Instant,
     val trigger: Trigger
-)
+) {
+    fun descriptionAsHtml(): String? {
+        return description?.let { MarkdownToHtmlParser().parse(it) }
+    }
+}
 
 @Serdeable
 data class AllTasksTaskView(

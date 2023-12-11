@@ -12,6 +12,7 @@ group = "com.timsummertonbrier"
 
 val kotlinVersion: String by project
 val exposedVersion: String by project
+val commonmarkVersion: String by project
 
 repositories {
     mavenCentral()
@@ -38,11 +39,13 @@ dependencies {
 
     runtimeOnly("org.yaml:snakeyaml")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposedVersion")
+    implementation("org.commonmark:commonmark:$commonmarkVersion")
+
 
     testImplementation("io.mockk:mockk:1.13.8")
     testImplementation("org.assertj:assertj-core:3.24.2")
