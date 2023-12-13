@@ -82,6 +82,10 @@ PATH=$PATH:/usr/bin
   . $FOLDER/raspberrypi.env
   log "Sourced app environment"
 
+  log "Redirecting traffic from the default web port (80) to our apps port (8080)"
+  sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+  log "Redirected traffic"
+
   log "Deployment complete, running jar"
 } > $FOLDER/deploy_$(date "+%Y-%m-%d_%H:%M:%S.%N").log 2>&1
 
