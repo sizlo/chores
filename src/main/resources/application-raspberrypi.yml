@@ -1,2 +1,6 @@
 app:
   environment: raspberrypi
+
+micronaut:
+  server:
+    port: 80
