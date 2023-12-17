@@ -2,6 +2,7 @@ package com.timsummertonbrier.chores.controller.rest
 
 import com.timsummertonbrier.chores.database.TaskRepository
 import com.timsummertonbrier.chores.domain.*
+import com.timsummertonbrier.chores.service.Autocompleter
 import com.timsummertonbrier.chores.service.CompletionReverter
 import com.timsummertonbrier.chores.service.TaskCompleter
 import io.micronaut.http.MediaType
@@ -13,7 +14,8 @@ import jakarta.validation.Valid
 open class TaskRestController(
     private val taskRepository: TaskRepository,
     private val taskCompleter: TaskCompleter,
-    private val completionReverter: CompletionReverter
+    private val completionReverter: CompletionReverter,
+    private val autocompleter: Autocompleter,
 ) {
 
     @Post
@@ -48,6 +50,11 @@ open class TaskRestController(
         return taskRepository.findById(id)
     }
 
+    @Post("/autocomplete")
+    fun autocomplete(): List<Completion> {
+        return autocompleter.autocomplete()
+    }
+
     @Get("/{id}")
     fun getTask(@PathVariable id: Int): Task {
         return taskRepository.findById(id)
@@ -68,9 +75,9 @@ open class TaskRestController(
         return taskRepository.getCompletedTodayTasksForHomePage()
     }
 
-    @Get("/overdue-autocomplete")
-    fun getOverdueAutocompleteTaskIds(): List<Int> {
-        return taskRepository.getOverdueAutocompleteTaskIds()
+    @Get("/tasks-for-autocompletion")
+    fun getTasksForAutocompletion(): List<Int> {
+        return taskRepository.getTasksForAutocompletion()
     }
 
     @Serdeable

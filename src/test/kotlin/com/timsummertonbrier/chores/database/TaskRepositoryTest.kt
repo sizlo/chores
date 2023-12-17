@@ -77,18 +77,20 @@ class TaskRepositoryTest {
     }
 
     @Test
-    fun `gets correct overdue tasks for autocompletion`() {
+    fun `gets correct tasks for autocompletion`() {
         transaction {
             // Ignored because not autocomplete
             addTask(dueDate = today().minusDays(1), autocomplete = false)
             // Ignored because not due
             addTask(dueDate = today().plusDays(1), autocomplete = true)
+            // Ignored because due today
+            addTask(dueDate = today(), autocomplete = true)
             // Included
-            val expected1 = addTask(dueDate = today(), autocomplete = true)
+            val expected1 = addTask(dueDate = today().minusDays(1), autocomplete = true)
             // Included
-            val expected2 = addTask(dueDate = today().minusDays(1), autocomplete = true)
+            val expected2 = addTask(dueDate = today().minusDays(2), autocomplete = true)
 
-            val actual = testSubject.getOverdueAutocompleteTaskIds()
+            val actual = testSubject.getTasksForAutocompletion()
 
             assertThat(actual).containsExactlyInAnyOrder(expected1, expected2)
         }

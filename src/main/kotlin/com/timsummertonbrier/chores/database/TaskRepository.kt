@@ -1,10 +1,7 @@
 package com.timsummertonbrier.chores.database
 
 import com.timsummertonbrier.chores.domain.*
-import com.timsummertonbrier.chores.utils.atStartOfDay
-import com.timsummertonbrier.chores.utils.now
-import com.timsummertonbrier.chores.utils.plusDays
-import com.timsummertonbrier.chores.utils.today
+import com.timsummertonbrier.chores.utils.*
 import jakarta.inject.Singleton
 import kotlinx.datetime.*
 import org.jetbrains.exposed.dao.id.IntIdTable
@@ -12,7 +9,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.less
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
 import org.jetbrains.exposed.sql.kotlin.datetime.date
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
@@ -171,7 +167,7 @@ class TaskRepository {
     fun getOverdueTasksForHomePage(): List<OverdueTasksTaskView> {
         return Tasks
             .slice(Tasks.id, Tasks.name, Tasks.dueDate)
-            .select { isOverdue() }
+            .select { Tasks.dueDate lessEq today() }
             .orderBy(
                 Tasks.dueDate to SortOrder.ASC,
                 Tasks.name to SortOrder.ASC,
@@ -188,16 +184,17 @@ class TaskRepository {
             .map { it.toCompletedTodayTasksTaskView() }
     }
 
-    fun getOverdueAutocompleteTaskIds(): List<Int> {
+    fun getTasksForAutocompletion(): List<Int> {
+        // We want to find tasks that were due yesterday, not today, as the autocompletion
+        // runs at 3am. If we found tasks which were due today, they would only appear
+        // as overdue tasks between midnight and 3am on their due day
+        val yesterday = today().minusDays(1)
+
         return Tasks
             .slice(Tasks.id)
-            .select { isOverdue() }
+            .select { Tasks.dueDate lessEq yesterday }
             .andWhere { Tasks.autocomplete eq Op.TRUE }
             .map { it[Tasks.id].value }
-    }
-
-    private fun isOverdue(): Op<Boolean> {
-        return Tasks.dueDate lessEq today()
     }
 
     private fun wasCompletedToday(): Op<Boolean> {

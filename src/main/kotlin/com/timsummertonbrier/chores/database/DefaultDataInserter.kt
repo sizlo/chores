@@ -107,8 +107,18 @@ class DefaultDataInserter(
 
         taskRepository.addTask(
             TaskRequest(
-                name = "to be autocompleted",
+                name = "due yesterday autocomplete",
                 dueDate = today().minusDays(1).toString(),
+                autocomplete = true,
+                triggerType = TriggerType.FIXED_DELAY.name,
+                daysBetween = "20",
+            )
+        )
+
+        taskRepository.addTask(
+            TaskRequest(
+                name = "due today autocomplete",
+                dueDate = today().toString(),
                 autocomplete = true,
                 triggerType = TriggerType.FIXED_DELAY.name,
                 daysBetween = "20",

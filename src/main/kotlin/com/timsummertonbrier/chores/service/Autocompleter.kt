@@ -2,6 +2,7 @@ package com.timsummertonbrier.chores.service
 
 import com.timsummertonbrier.chores.database.TaskRepository
 import io.micronaut.context.annotation.Requires
+import com.timsummertonbrier.chores.domain.Completion
 import io.micronaut.context.event.StartupEvent
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.scheduling.TaskScheduler
@@ -13,11 +14,11 @@ class Autocompleter(private val taskRepository: TaskRepository, private val task
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun autocomplete() {
+    fun autocomplete(): List<Completion> {
         logger.info("Running autocomplete scheduled job")
-        val tasks = taskRepository.getOverdueAutocompleteTaskIds()
+        val tasks = taskRepository.getTasksForAutocompletion()
         logger.info("Found ${tasks.size} tasks to autocomplete")
-        tasks.forEach {
+        return tasks.map {
             logger.info("Autocompleting task with id=$it")
             taskCompleter.complete(taskId = it, autocomplete = true)
         }
