@@ -43,7 +43,7 @@ open class CompletionReverterTest {
     }
 
     @Test
-    fun `updates due date and adds completion row in same transaction`() {
+    fun `updates due date and reverts completion row in same transaction`() {
         taskId = addTask(dueDate = "2020-01-01")
         val completionId = addCompletion(dueDateWhenCompleted = "2019-01-01")
 
