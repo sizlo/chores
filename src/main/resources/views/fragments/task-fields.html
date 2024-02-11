@@ -11,8 +11,7 @@
 
       <div class="mb-3">
         <label for="dueDate" class="form-label">Due date</label>
-        <input type="text" inputmode="numeric" name="dueDate" id="dueDate" th:value="${taskRequest.dueDate}" class="form-control"/>
-        <div class="form-text">Note: Requires YYYY-MM-DD format, e.g 2023-12-25</div>
+        <input type="date" pattern="\d{4}-\d{2}-\d{2}" name="dueDate" id="dueDate" th:value="${taskRequest.dueDate}" class="form-control"/>
         <div th:replace="~{fragments/field-errors :: field-errors('dueDate', ${errors})}"></div>
       </div>
 
