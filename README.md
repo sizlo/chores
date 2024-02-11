@@ -20,11 +20,12 @@ Pre-requisites: Docker
 You can connect to an external database by overriding the database connection details with environment variables. Check `application-default.yml` for the appropriate variables.
 
 ## Release
-Pre-requisites: GitHub CLI
+Pre-requisites: GitHub CLI, Docker
 
-There is a release script to update the app version, build the jar, and publish the release to GitHub. Make sure you are on the `main` branch, with no local changes, then run:
+There is a release script to update the app version, build the jar, and publish the release to GitHub. Make sure you are on the `main` branch, with no local changes, then:
 
-`./release.sh <patch|minor|major>`
+- Spin up local database (required for the tests): `docker compose up postgres`
+- Run the release script: `./release.sh <patch|minor|major>`
 
 ## Deploy
 Pre-requisites: Raspberry Pi, hosted Postgres database
