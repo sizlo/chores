@@ -8,8 +8,26 @@
             <div class="container">
                 <h1 th:text="${task.name}">Task Details</h1>
                 <div class="d-flex pb-2">
-                    <a th:href="@{/tasks/{id}/edit(id=${task.id})}" class="btn btn-outline-primary">Edit</a>
-                    <form action="#" th:action="@{/tasks/{id}/delete(id=${task.id})}" method="post" onsubmit="disableSubmitButtons()" class="mx-4">
+                    <form action="#"
+                          th:action="@{/tasks/{id}/complete(id=${task.id}, callbackUrl='/tasks/' + ${task.id})}"
+                          method="post"
+                          onsubmit="disableSubmitButtons()"
+                          class="me-2">
+                        <div th:if="${!wasCompletedToday}">
+                            <input th:replace="~{fragments/disabling-submit :: disabling-submit('Complete')}" />
+                        </div>
+                        <div th:if="${wasCompletedToday}">
+                            <input disabled type="submit" class="btn btn-outline-primary" th:value="Complete">
+                        </div>
+                    </form>
+
+                    <a th:href="@{/tasks/{id}/edit(id=${task.id})}" class="btn btn-outline-primary mx-2">Edit</a>
+
+                    <form action="#"
+                          th:action="@{/tasks/{id}/delete(id=${task.id})}"
+                          method="post"
+                          onsubmit="disableSubmitButtons()"
+                          class="ms-2">
                         <input class="btn btn-outline-primary" type="button" value="Delete" onclick="showDeletePrompt()" />
                         <span id="delete-prompt" class="visually-hidden">
                             <span>Are you sure?</span>

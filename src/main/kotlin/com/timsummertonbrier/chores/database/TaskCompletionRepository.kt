@@ -75,6 +75,22 @@ class TaskCompletionRepository {
             .first()
     }
 
+    fun findLatestCompletionForTaskId(taskId: Int): Completion? {
+        return TaskCompletions
+            .slice(
+                TaskCompletions.id,
+                TaskCompletions.taskId,
+                TaskCompletions.completionTimestamp,
+                TaskCompletions.dueDateWhenCompleted,
+                TaskCompletions.wasAutocomplete
+            )
+            .select { TaskCompletions.taskId eq taskId }
+            .orderBy(TaskCompletions.completionTimestamp to SortOrder.DESC)
+            .limit(1)
+            .map { it.toCompletion() }
+            .firstOrNull()
+    }
+
     fun findLatestNonAutoCompletionForTaskId(taskId: Int): Completion {
         return TaskCompletions
             .slice(

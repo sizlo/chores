@@ -32,7 +32,8 @@ open class TaskWebController(
     @View("task-details")
     fun viewTaskDetails(@PathVariable id: Int): HttpResponse<Any> {
         return HttpResponse.ok(mapOf(
-            "task" to taskRepository.findById(id)
+            "task" to taskRepository.findById(id),
+            "wasCompletedToday" to taskCompleter.taskWasCompletedToday(id)
         ))
     }
 
@@ -78,9 +79,9 @@ open class TaskWebController(
 
     @Post("/{id}/complete")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    fun completeTask(@PathVariable id: Int): HttpResponse<Any> {
+    fun completeTask(@PathVariable id: Int, @QueryValue callbackUrl: String?): HttpResponse<Any> {
         taskCompleter.complete(id)
-        return HttpResponse.seeOther(URI.create("/"))
+        return HttpResponse.seeOther(URI.create(callbackUrl ?: "/"))
     }
 
     @Post("/{id}/uncomplete")
