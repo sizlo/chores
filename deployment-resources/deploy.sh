@@ -18,6 +18,23 @@ PATH=$PATH:/usr/bin
 {
   log "Deployment started"
 
+  log "Waiting for successful internet connection"
+  MAX_INTERNET_CONNECTION_RETRIES=10
+  CURRENT_INTERNET_CONNECTION_RETRY=1
+  INTERNET_CONNECTION_RETRY_DELAY_IN_SECONDS=60
+  while ! wget -q --spider http://google.com
+  do
+      log "Could not make successful internet connection on attempt ${CURRENT_INTERNET_CONNECTION_RETRY}/${MAX_INTERNET_CONNECTION_RETRIES}, trying again in ${INTERNET_CONNECTION_RETRY_DELAY_IN_SECONDS} seconds"
+      ((CURRENT_INTERNET_CONNECTION_RETRY++))
+      if [ $CURRENT_INTERNET_CONNECTION_RETRY -gt $MAX_INTERNET_CONNECTION_RETRIES ]
+      then
+          log "Exhausted all internet connection retries, aborting deployment"
+          exit 1
+      fi
+      sleep $INTERNET_CONNECTION_RETRY_DELAY_IN_SECONDS
+  done
+  log "Made successful internet connection"
+
   # Install java if required
   log "Checking for java 17 on the PATH"
   if java --version | grep -q "\b17\b"; then
