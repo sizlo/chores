@@ -3,7 +3,7 @@ chores
 
 Micronaut app to track chores/tasks. Intended to be self hosted on a Raspberry Pi.
 
-The Raspberry Pi I am hosting this on is a Raspberry Pi 1 Model B+ (2014), all the setup instructions assume this is the target.
+The Raspberry Pi I am hosting this on is a Raspberry Pi 4 Model B 8GB. This project was initially written to target a Raspberry Pi 1 Model B+ (2014). The older Pi could not handle running Docker, so releasing/deploying was handled differently. You can view the scripts used and setup instructions for that at [this tag in the repo](https://github.com/sizlo/chores/tree/v0.5.0).
 
 ## Technologies
 - [Micronaut](https://micronaut.io/)
@@ -22,48 +22,22 @@ You can connect to an external database by overriding the database connection de
 ## Release
 Pre-requisites: GitHub CLI, Docker
 
-There is a release script to update the app version, build the jar, and publish the release to GitHub. Make sure you are on the `main` branch, with no local changes, then:
+There is a release script to update the app version, build and publish the docker image, and publish the release to GitHub. Make sure you are on the `main` branch, with no local changes, then:
 
 - Spin up local database (required for the tests): `docker compose up postgres`
 - Run the release script: `./release.sh <patch|minor|major>`
 
-## Deploy
-Pre-requisites: Raspberry Pi, hosted Postgres database
+Once the new release has been pushed, [follow the instructions here](https://github.com/sizlo/raspberry-pi-config?tab=readme-ov-file#app-updates) to get the new version running on the Raspberry Pi.
 
-There is a deploy script to install java if required, download the jar of the latest release, and run it. Follow these instructions to set up your Raspberry Pi to run the deploy script every time it boots up.
+### Required environment variables for running on a Raspberry Pi
 
-- Install OS on Raspberry Pi with [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
-    - I used Raspberry Pi OS (Legacy) Lite - This is a headless OS compatible with Raspberry Pi 1's
-    - Configure Raspberry Pi Imager to apply OS customization settings
-        - Enable ssh with password authentication
-        - Set hostname to `chores`
-        - Create a username and password (note to author: these are stored in Bitwarden if you've forgotten them)
-        - Configure Wi-Fi network if required
-- Boot up Raspberry Pi and ssh in: `ssh <user>@chores.local`
-- Configure environment for app
-    - Create folder `$HOME/chores`
-    - Create env file `$HOME/chores/raspberrypi.env` with contents:
-      ```
-      export MICRONAUT_ENVIRONMENTS=raspberrypi
-      export APP_LOG_FILE_LOCATION=$HOME/chores
-      export DATASOURCES_DEFAULT_URL=<insert jdbc url here>
-      export DATASOURCES_DEFAULT_USERNAME=<insert database username here>
-      export DATASOURCES_DEFAULT_PASSWORD=<insert database password here>
-      ```
-- Configure cron to run deploy script at startup
-    - Launch the cron editor `crontab -e`, add the following line:
-      ```
-      @reboot sleep 30; curl https://raw.githubusercontent.com/sizlo/chores/main/deployment-resources/deploy.sh | sh
-      ```
-- Restart the Raspberry Pi
-- Once the app has started up it will be available at [http://chores.local/](http://chores.local/)
-
-You can view deployment logs in `$HOME/chores/deploy_<datetime>.log`. Logs for latest 5 deployments are kept.
-
-You can view app logs in `$HOME/chores/app.log`. App logs are rotated daily, previous days are archived in `$HOME/chores/app.log.<date>.gz`. The latest 50 app log archives are kept.
-
-## Caveats
-The only Java 17 jdk compatible with a Raspberry Pi 1 Model B+ (2014) I could find is from [here](https://github.com/JsBergbau/OpenJDK-Raspberry-Pi-Zero-W-armv6). A mirror of this jdk is stored in this repository, the deploy script will download this jdk if required.
+```
+MICRONAUT_ENVIRONMENTS=raspberrypi
+APP_LOG_FILE_LOCATION=<insert log file location here>
+DATASOURCES_DEFAULT_URL=<insert jdbc url here>
+DATASOURCES_DEFAULT_USERNAME=<insert database username here>
+DATASOURCES_DEFAULT_PASSWORD=<insert database password here>
+```
 
 ## Database hosting
 I am using the free tier of [Postgres on Clever Cloud](https://www.clever-cloud.com/product/postgresql/). I have one database, with multiple schemas within it. One schema is for the prod environment (app running on the Raspberry Pi), and there is another dev schema to connect to for local testing.
