@@ -94,6 +94,7 @@ docker build --network host -t timsummertonbrier/chores:$RELEASE_VERSION -t tims
 
 echo "Pushing docker image"
 docker push timsummertonbrier/chores:$RELEASE_VERSION
+docker push timsummertonbrier/chores:latest
 
 echo "Creating github release $RELEASE_VERSION"
 gh release create "v$RELEASE_VERSION" --title $RELEASE_VERSION --notes "" --latest
