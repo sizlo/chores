@@ -90,7 +90,7 @@ then
 fi
 
 echo "Building docker image"
-docker build --network host -t timsummertonbrier/chores:$RELEASE_VERSION .
+docker build --network host -t timsummertonbrier/chores:$RELEASE_VERSION -t timsummertonbrier/chores:latest .
 
 echo "Pushing docker image"
 docker push timsummertonbrier/chores:$RELEASE_VERSION
