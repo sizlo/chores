@@ -5,6 +5,7 @@ micronaut:
     static-resources:
       default:
         paths: classpath:static
+        mapping: ${micronaut.server.context-path}/**
   serde:
     serialization:
       inclusion: always
