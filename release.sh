@@ -89,19 +89,14 @@ then
   upgradeVersion $RELEASE_VERSION
 fi
 
-JAR_PATH="build/libs/chores-$RELEASE_VERSION-all-optimized.jar"
+echo "Building docker image"
+docker build --network host -t timsummertonbrier/chores:$RELEASE_VERSION .
 
-echo "Building jar"
-MICRONAUT_ENVIRONMENTS=raspberrypi ./gradlew clean build
-JAR_SHA1SUM=$(sha1sum $JAR_PATH | cut -f 1 -d " ")
+echo "Pushing docker image"
+docker push timsummertonbrier/chores:$RELEASE_VERSION
 
 echo "Creating github release $RELEASE_VERSION"
-gh release create \
-  "v$RELEASE_VERSION" \
-  $JAR_PATH \
-  --title $RELEASE_VERSION \
-  --notes "jar sha1sum: $JAR_SHA1SUM" \
-  --latest
+gh release create "v$RELEASE_VERSION" --title $RELEASE_VERSION --latest
 
 SNAPSHOT_VERSION="$RELEASE_MAJOR.$RELEASE_MINOR.$((RELEASE_PATCH + 1))-SNAPSHOT"
 upgradeVersion $SNAPSHOT_VERSION
