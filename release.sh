@@ -96,7 +96,7 @@ echo "Pushing docker image"
 docker push timsummertonbrier/chores:$RELEASE_VERSION
 
 echo "Creating github release $RELEASE_VERSION"
-gh release create "v$RELEASE_VERSION" --title $RELEASE_VERSION --latest
+gh release create "v$RELEASE_VERSION" --title $RELEASE_VERSION --notes "" --latest
 
 SNAPSHOT_VERSION="$RELEASE_MAJOR.$RELEASE_MINOR.$((RELEASE_PATCH + 1))-SNAPSHOT"
 upgradeVersion $SNAPSHOT_VERSION
