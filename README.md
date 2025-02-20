@@ -32,12 +32,15 @@ Once the new release has been pushed, [follow the instructions here](https://git
 ### Required environment variables for running on a Raspberry Pi
 
 ```
+MICRONAUT_SERVER_CONTEXT_PATH=/chores
 MICRONAUT_ENVIRONMENTS=raspberrypi
 APP_LOG_FILE_LOCATION=<insert log file location here>
 DATASOURCES_DEFAULT_URL=<insert jdbc url here>
 DATASOURCES_DEFAULT_USERNAME=<insert database username here>
 DATASOURCES_DEFAULT_PASSWORD=<insert database password here>
 ```
+
+The `MICRONAUT_SERVER_CONTEXT_PATH` is needed because the Raspberry Pi this app is hosted on hosts other services too. Ideally, these would be namespaced by subdomains, but I cannot set up subdomains on my local network without getting a new router. Instead, the services will be namespaced by url path, e.g this app will be available at http://pi.local/chores. Thankfully Micronaut supports setting a context-path, which is the root path from which all pages/endpoints are served.
 
 ## Database hosting
 I am using the free tier of [Postgres on Clever Cloud](https://www.clever-cloud.com/product/postgresql/). I have one database, with multiple schemas within it. One schema is for the prod environment (app running on the Raspberry Pi), and there is another dev schema to connect to for local testing.

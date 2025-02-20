@@ -8,6 +8,8 @@ micronaut:
   serde:
     serialization:
       inclusion: always
+  server:
+    context-path: ${MICRONAUT_SERVER_CONTEXT_PATH:/}
 
 app:
   version: ${version}
