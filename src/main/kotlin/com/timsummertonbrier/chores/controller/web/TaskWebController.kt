@@ -5,6 +5,7 @@ import com.timsummertonbrier.chores.domain.TaskRequest
 import com.timsummertonbrier.chores.error.resetErrorCookies
 import com.timsummertonbrier.chores.service.CompletionReverter
 import com.timsummertonbrier.chores.service.TaskCompleter
+import io.micronaut.context.annotation.Value
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
@@ -17,7 +18,9 @@ import java.net.URI
 open class TaskWebController(
     private val taskRepository: TaskRepository,
     private val taskCompleter: TaskCompleter,
-    private val completionReverter: CompletionReverter
+    private val completionReverter: CompletionReverter,
+    @Value("\${micronaut.server.context-path}")
+    private val serverContextPath: String
 ) {
 
     @Get
@@ -60,34 +63,39 @@ open class TaskWebController(
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     open fun addTask(@Valid @Body taskRequest: TaskRequest): HttpResponse<Any> {
         val id = taskRepository.addTask(taskRequest)
-        return HttpResponse.seeOther(URI.create("/tasks/$id"))
+        return redirect("/tasks/$id")
     }
 
     @Post("/{id}/edit")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     open fun editTask(@PathVariable id: Int, @Valid @Body taskRequest: TaskRequest): HttpResponse<Any> {
         taskRepository.updateTask(id, taskRequest)
-        return HttpResponse.seeOther(URI.create("/tasks/$id"))
+        return redirect("/tasks/$id")
     }
 
     @Post("/{id}/delete")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     fun deleteTask(@PathVariable id: Int): HttpResponse<Any> {
         taskRepository.deleteTask(id)
-        return HttpResponse.seeOther(URI.create("/tasks"))
+        return redirect("/tasks")
     }
 
     @Post("/{id}/complete")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     fun completeTask(@PathVariable id: Int, @QueryValue callbackUrl: String?): HttpResponse<Any> {
         taskCompleter.complete(id)
-        return HttpResponse.seeOther(URI.create(callbackUrl ?: "/"))
+        return redirect(callbackUrl ?: "/")
     }
 
     @Post("/{id}/uncomplete")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     fun uncompleteTask(@PathVariable id: Int): HttpResponse<Any> {
         completionReverter.revertLatestCompletion(id)
-        return HttpResponse.seeOther(URI.create("/"))
+        return redirect("/")
+    }
+
+    private fun redirect(path: String): HttpResponse<Any> {
+        val fullPath = "${serverContextPath}/${path}".replace("/+".toRegex(), "/")
+        return HttpResponse.seeOther(URI.create(fullPath))
     }
 }
